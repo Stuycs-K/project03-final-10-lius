@@ -1,13 +1,13 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Vh67aNdh)
-# PROJECT NAME HERE
+# A Poor Man's Music Player
 
-### GROUP NAME HERE
+### The Lone Sophie
 
-Group Members Here
+Sophie Liu
        
 ### Project Description:
 
-Explain what is this project.
+A music library player that allows songs to be played, added, removed, and randomized.
   
 ### Instructions:
 
