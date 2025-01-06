@@ -5,7 +5,65 @@
 #include <ctype.h>
 #include "node.h"
 #include "library.h"
+#include "commands.h"
+
 int main() {
+
+  struct song_node ** library = init();
+  char input[256];
+
+  while (1) {
+    printf("Your current library\n");
+    print_library(library);
+
+    printf("What would you like to do? (enter corresponding number)\n");
+    printf("1 - Play song\n");
+    printf("2 - Add song\n");
+    printf("3 - Create randomized playlist\n");
+    printf("4 - Quit");
+    //printf("x - Delete account\n");
+
+    if (fgets(input, sizeof(input), stdin) == NULL) {
+      exit(1);
+    }
+    if (strcmp(input, "1") == 0) {
+      play_song();
+    }
+    else if (strcmp(input, "2") == 0) {
+      add_song();
+    }
+    else if (strcmp(input, "3") == 0) {
+      randomize_songs();
+    }
+    else if (strcmp(input, "4") == 0) {
+      return 0;
+    }
+    else {
+      printf("Invalid command.\n");
+      printf("Try: 1, 2, or 3\n");
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   srand(time(NULL));
   //Linked List Tests

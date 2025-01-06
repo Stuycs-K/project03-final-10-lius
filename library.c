@@ -14,21 +14,26 @@ struct song_node ** init(){
   }
   return songArr;
 }
+
 int first_letter(char c){
   if(!isalpha(c)){
     return 0;
   }
   return toupper(c) - 64;
 }
+
 void add(struct song_node ** library, char * artist, char * title){
   library[first_letter(artist[0])] = insert_song(library[first_letter(artist[0])],artist,title);
 }
+
 struct song_node * search_song(struct song_node ** library, char * artist, char * title ){
   return find_song(library[first_letter(artist[0])],artist,title);
 }
+
 struct song_node * search_artist(struct song_node ** library, char * artist ){
   return find_song_artist(library[first_letter(artist[0])],artist);
 }
+
 void print_letter(struct song_node ** library, char letter){
   print_song_list(library[first_letter(letter)]);
 }
