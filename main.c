@@ -10,6 +10,8 @@
 int main() {
 
   struct song_node ** library = init();
+  LIB_SIZE = 0;
+
   char input[256];
 
   while (1) {
@@ -30,7 +32,7 @@ int main() {
       play_song();
     }
     else if (strcmp(input, "2") == 0) {
-      add_song();
+      add_song(library);
     }
     else if (strcmp(input, "3") == 0) {
       randomize_songs();

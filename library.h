@@ -1,6 +1,9 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+const int MAX_LIB_SIZE = 27;
+extern int LIB_SIZE;
+
 struct song_node ** init();
 int first_letter(char c);
 void add(struct song_node ** library, char * artist, char * title);
