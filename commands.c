@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "library.h"
 
 void play_song() {
@@ -11,7 +13,7 @@ void add_song(struct song_node ** library) {
   printf("Would you like to manually add a song or automatically input one via MP3 file?\n");
   printf("1 - Manual\n");
   printf("2 - Automatic\n");
-  
+
   if (fgets(input, sizeof(input), stdin) == NULL) {
     exit(1);
   }
@@ -30,6 +32,9 @@ void add_song(struct song_node ** library) {
   }
   else if (strcmp(input, "2") == 0) {
     //auto
+    // https://id3.org/
+    // https://en.wikipedia.org/wiki/APE_tag
+
   }
   else {
     printf("Invalid command.\n");
@@ -39,6 +44,8 @@ void add_song(struct song_node ** library) {
   LIB_SIZE++;
 }
 
-void randomize_songs() {
-
+void randomize_songs(struct song_node ** library) {
+  printf("Creating randomized playlist...\n");
+  printf("Your Randomized Playlist\n");
+  shuffle(library);
 }
