@@ -117,7 +117,9 @@ void shuffle(struct song_node ** library) {
       printf("\n%s", line);
       write(fd, line, sizeof(line));
     }
-    i--;
+    else {
+      i--;
+    }
   }
   close(fd);
   printf("\n");

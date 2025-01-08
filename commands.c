@@ -35,9 +35,7 @@ void scan_directory(char * path) {
 void play_song() {
   char song[256];
   printf("Enter song to play: ");
-  if (fgets(song, sizeof(song), stdin) == NULL) {
-    exit(1);
-  }
+  scanf("%[^\n]", song);
   //need to get mp3 file associated w/ inputted song name
   //if no mp3 file --> MP3 file does not exist
 
