@@ -107,6 +107,7 @@ void shuffle(struct song_node ** library) {
     }
   }
   if (count == 0) return; //library empty
+  int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
   int used_indexes[LIB_SIZE];
   for (int i = 0; i < LIB_SIZE; i++) {
     int random_index = rand() % count;
@@ -114,11 +115,11 @@ void shuffle(struct song_node ** library) {
       char line[100];
       sprintf(line, "{%s, %s}\n", all_songs[random_index]->artist, all_songs[random_index]->title);
       printf("\n%s", line);
-      int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
       write(fd, line, sizeof(line));
     }
     i--;
   }
+  close(fd);
   printf("\n");
 }
 

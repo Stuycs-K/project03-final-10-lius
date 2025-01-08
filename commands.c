@@ -115,9 +115,20 @@ void randomize_songs(struct song_node ** library) {
 // save library to file
 void save_library(struct song_node ** library) {
   printf("Saving library...\n");
-  char lib[1000];
-  sprintf(lib, "%s\n", print_library(library));
   int fd = open("library_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-  write(fd, lib, sizeof(library));
+  if (fd == -1) {
+    perror("error opening file for saving library");
+    return;
+  }
+
+  for (int i = 0; i < LIB_SIZE; i++) {
+    if (library[i] != NULL) {
+      dprintf(fd, "%c: ", i + 96);
+      song_list_to_file(library[i], fd);
+    }
+  }
+
+  close(fd);
+
   printf("Library saved!\n");
 }

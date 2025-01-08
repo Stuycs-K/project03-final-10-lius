@@ -52,6 +52,19 @@ void print_song_list(struct song_node * list){
   printf("{%s, %s} ]\n",list->artist,list->title);
 }
 
+void song_list_to_file(struct song_node * list, int fd){
+  if (list == NULL) {
+    dprintf(fd, "[ ]\n");
+    return;
+  }
+  dprintf(fd, "[ ");
+  while(list->next != NULL){
+    dprintf(fd, "{%s, %s} | ",list->artist,list->title);
+    list = list->next;
+  }
+  dprintf(fd, "{%s, %s} ]\n",list->artist,list->title);
+}
+
 struct song_node * find_song(struct song_node * list, char * artist, char * title){
   while(list != NULL){
     if(strcmp(list->artist,artist) == 0 && strcmp(list->title,title) == 0){
