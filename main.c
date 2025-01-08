@@ -23,9 +23,10 @@ int main() {
     printf("-------\n");
     printf("1 - Play song\n");
     printf("2 - Add song\n");
-    printf("3 - Create randomized playlist\n");
-    printf("4 - Save library\n");
-    printf("5 - Quit\n");
+    printf("2 - Remove song\n");
+    printf("4 - Create randomized playlist\n");
+    printf("5 - Save library\n");
+    printf("6 - Quit\n");
     printf("-------\n> ");
     //printf("x - Delete account\n");
 
@@ -37,12 +38,15 @@ int main() {
       add_song(library);
     }
     else if (strcmp(input, "3") == 0) {
-      randomize_songs(library);
+      remove_song(library);
     }
     else if (strcmp(input, "4") == 0) {
-      save_library(library);
+      randomize_songs(library);
     }
     else if (strcmp(input, "5") == 0) {
+      save_library(library);
+    }
+    else if (strcmp(input, "6") == 0) {
       return 0;
     }
     else {
