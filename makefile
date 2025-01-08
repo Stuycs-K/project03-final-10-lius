@@ -11,3 +11,4 @@ run: runme
 clean:
 	@rm *.o
 	@rm runme
+	@rm library_save.txt randomized_playlist_save.txt
