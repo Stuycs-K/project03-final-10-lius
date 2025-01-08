@@ -7,10 +7,10 @@
 #include <ctype.h>
 #include "node.h"
 
-//#define LIB_SIZE 27
-//#define MAX_LIB_SIZE 27
-const int MAX_LIB_SIZE = 27;
-int LIB_SIZE;
+#define LIB_SIZE 27
+#define MAX_LIB_SIZE 27
+// const int MAX_LIB_SIZE = 27;
+// int LIB_SIZE;
 
 struct song_node ** init(){
   struct song_node ** songArr = (struct song_node**)malloc(MAX_LIB_SIZE*sizeof(struct song_node));

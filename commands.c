@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <dirent.h>
+#include "node.h"
 #include "library.h"
 
 #define MP3_files_dir_path "./"
@@ -62,25 +63,22 @@ void play_song() {
 void add_song(struct song_node ** library) {
   //if lib size = max lib size --> say cant add anymore songs
   char input[256];
-  printf("Would you like to manually add a song or automatically input one via MP3 file?\n");
+  printf("\nWould you like to manually add a song or automatically input one via MP3 file?\n");
+  printf("-------\n");
   printf("1 - Manual\n");
   printf("2 - Automatic\n");
+  printf("-------\n> ");
 
-  if (fgets(input, sizeof(input), stdin) == NULL) {
-    //return;
-    exit(1);
-  }
+  scanf("%s", input);
   if (strcmp(input, "1") == 0) {
+    getchar(); // clear newline character left by previous scanf
     char title[256];
     printf("Enter song title: ");
-    if (fgets(input, sizeof(input), stdin) == NULL) { //double check later if this takes the who line w/ printed statement or just user input
-      exit(1);
-    }
+    scanf("%[^\n]", title);
+    getchar();
     char artist[256];
     printf("Enter artist name: ");
-    if (fgets(input, sizeof(input), stdin) == NULL) { //double check later if this takes the who line w/ printed statement or just user input
-      exit(1);
-    }
+    scanf("%[^\n]", artist);
     add(library, artist, title);
   }
   else if (strcmp(input, "2") == 0) {
@@ -91,11 +89,13 @@ void add_song(struct song_node ** library) {
 
   }
   else {
-    printf("Invalid command.\n");
-    printf("Try: 1 or 2\n");
+    printf("\nInvalid command.\n");
+    printf("Try: 1 or 2\n\n");
   }
 
-  LIB_SIZE++;
+  printf("\n");
+
+  //LIB_SIZE++;
 }
 
 void randomize_songs(struct song_node ** library) {
@@ -104,9 +104,7 @@ void randomize_songs(struct song_node ** library) {
   shuffle(library);
   char input[256];
   printf("Would you like to save this playlist? (yes/no): ");
-  if (fgets(input, sizeof(input), stdin) == NULL) {
-    exit(1);
-  }
+  scanf("%s", input);
   if (strcmp(input, "yes") == 0) {
     //save playlist
   }
@@ -121,7 +119,8 @@ void save_library(struct song_node ** library) {
     return;
   }
 
-  for (int i = 0; i < LIB_SIZE; i++) {
+  //for (int i = 0; i < LIB_SIZE; i++) {
+  for (int i = 0; i < 27; i++) {
     if (library[i] != NULL) {
       dprintf(fd, "%c: ", i + 96);
       song_list_to_file(library[i], fd);
@@ -130,5 +129,5 @@ void save_library(struct song_node ** library) {
 
   close(fd);
 
-  printf("Library saved!\n");
+  printf("Library saved!\n\n");
 }
