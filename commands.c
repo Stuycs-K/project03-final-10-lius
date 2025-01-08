@@ -75,6 +75,14 @@ void randomize_songs(struct song_node ** library) {
   printf("Creating randomized playlist...\n");
   printf("Your Randomized Playlist\n");
   shuffle(library);
+  char input[256];
+  printf("Would you like to save this playlist? (yes/no): ");
+  if (fgets(input, sizeof(input), stdin) == NULL) {
+    exit(1);
+  }
+  if (strcmp(input, "yes") == 0) {
+    //save playlist
+  }
 }
 
 // save library to file
