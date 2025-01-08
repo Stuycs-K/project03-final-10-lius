@@ -3,7 +3,33 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/wait.h>
+#include <dirent.h>
 #include "library.h"
+
+#define MP3_files_dir_path "./"
+
+/* returns true if file is an mp3 file */
+int is_mp3(char * filename) {
+  char * extension = strrchr(filename, '.');
+  return (extension && strcmp(extension, ".mp3") == 0); // check if has extension and that extension is an mp3
+}
+
+/* Scans for mp3 files in given directory */
+void scan_directory(char * path) {
+  DIR * d = opendir(path);
+  if (path == NULL) {
+    perror("Error opening directory\n");
+    return;
+  }
+
+  struct dirent *entry;
+  while ((entry = readdir(d)) != NULL) {
+    if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
+
+    }
+  }
+}
 
 void play_song() {
   char song[256];
@@ -61,6 +87,7 @@ void add_song(struct song_node ** library) {
     //auto
     // https://id3.org/
     // https://en.wikipedia.org/wiki/APE_tag
+    scan_directory(MP3_files_dir_path);
 
   }
   else {
