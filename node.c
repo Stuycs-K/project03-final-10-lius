@@ -103,7 +103,7 @@ struct song_node * random_song(struct song_node * list) {
   return list;
 }
 
-int remove_song(struct song_node ** list, char * artist, char * title) {
+int delete(struct song_node ** list, char * artist, char * title) {
   struct song_node * prev_node = NULL;
   struct song_node * current = *list;
   while (current != NULL) {
