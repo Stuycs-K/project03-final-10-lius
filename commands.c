@@ -96,6 +96,10 @@ void add_song(struct song_node ** library) {
   //LIB_SIZE++;
 }
 
+void remove_song(struct song_node ** library) {
+
+}
+
 void randomize_songs(struct song_node ** library) {
   printf("Creating randomized playlist...\n");
   printf("Your Randomized Playlist\n");

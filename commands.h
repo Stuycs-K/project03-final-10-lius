@@ -3,6 +3,7 @@
 
 void play_song();
 void add_song(struct song_node ** library);
+void remove_song(struct song_node ** library);
 void randomize_songs(struct song_node ** library);
 void save_library(struct song_node ** library);
 
