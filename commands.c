@@ -74,3 +74,8 @@ void randomize_songs(struct song_node ** library) {
   printf("Your Randomized Playlist\n");
   shuffle(library);
 }
+
+// save library to file
+void save_library(struct song_node ** library) {
+
+}

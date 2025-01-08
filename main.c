@@ -22,7 +22,8 @@ int main() {
     printf("1 - Play song\n");
     printf("2 - Add song\n");
     printf("3 - Create randomized playlist\n");
-    printf("4 - Quit");
+    printf("4 - Save library");
+    printf("5 - Quit");
     //printf("x - Delete account\n");
 
     if (fgets(input, sizeof(input), stdin) == NULL) {
@@ -35,9 +36,12 @@ int main() {
       add_song(library);
     }
     else if (strcmp(input, "3") == 0) {
-      randomize_songs();
+      randomize_songs(library);
     }
     else if (strcmp(input, "4") == 0) {
+      save_library(library);
+    }
+    else if (strcmp(input, "5") == 0) {
       return 0;
     }
     else {
