@@ -11,7 +11,7 @@
 #define MP3_FILES_DIR_PATH "songs/"
 
 char * concat(char *s1, char *s2) {
-  char *cat_str = malloc(strlen(s1) + strlen(s2) + 1);
+  char *cat_str = (char *)malloc(strlen(s1) + strlen(s2) + 1);
   strcpy(cat_str, s1);
   strcat(cat_str, s2);
   return cat_str;
@@ -21,6 +21,15 @@ char * concat(char *s1, char *s2) {
 int is_mp3(char * filename) {
   char * extension = strrchr(filename, '.');
   return (extension && strcmp(extension, ".mp3") == 0); // check if has extension and that extension is an mp3
+}
+
+void extract_metadata(FILE * file) {
+  char * header[100];
+  fseek(file, 0, SEEK_SET);
+  fread(header, 1, 10, file);
+  if (memcmp(header, "ID3", 3) == 0) {
+
+  }
 }
 
 /* Scans for mp3 files in given directory */
@@ -35,7 +44,8 @@ void scan_directory(char * path) {
   while ((entry = readdir(d)) != NULL) {
     if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
       char * file_path = concat(path, entry->d_name);
-      //...
+      FILE * file = fopen(file_path, "r");
+      extract_metadata(file);
       free(file_path); // free memory allocated by concat
     }
   }
@@ -43,7 +53,7 @@ void scan_directory(char * path) {
 
 void play_song() {
   getchar(); // clear newline character left by previous scanf
-  char *song = malloc(256);
+  char *song = (char*)malloc(256);
   printf("Enter song to play: ");
   scanf("%[^\n]", song);
   if (!is_mp3(song)) {
@@ -130,7 +140,7 @@ void remove_song(struct song_node ** library) {
   if (has_song) {
     printf("\nRemoving: [%s: %s] \n", artist, title);
   }
-  
+
   printf("\n");
 
   //LIB_SIZE++;
