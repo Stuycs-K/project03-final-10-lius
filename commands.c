@@ -8,7 +8,7 @@
 #include "node.h"
 #include "library.h"
 
-#define MP3_files_dir_path "./"
+#define MP3_FILES_DIR_PATH "songs/"
 
 char * concat(char *s1, char *s2) {
   char *cat_str = malloc(strlen(s1) + strlen(s2) + 1);
@@ -49,6 +49,7 @@ void play_song() {
   if (!is_mp3(song)) {
     song = concat(song, ".mp3");
   }
+  char * song_path = concat(MP3_FILES_DIR_PATH, song);
   //need to get mp3 file associated w/ inputted song name
   //if no mp3 file --> MP3 file does not exist
 
@@ -59,14 +60,16 @@ void play_song() {
   }
   if (pid == 0) {
     // prepare argument list for exec
-    char *args[] = {"mpg123", song, NULL};
+    char *args[] = {"mpg123", song_path, NULL};
 
     // execute mpg123 program to play the MP3 file
     execvp("mpg123", args);
   }
   else { //parent
-    printf("Playing %s...\n", song); //bug: prints even when file no exist
+    printf("-\n");
+    //printf("Playing %s...\n", song); //bug: prints even when file no exist
     printf("Press 'q' to quit and 'space' to pause\n");
+    printf("-\n");
     wait(NULL);
   }
 
@@ -99,7 +102,7 @@ void add_song(struct song_node ** library) {
     //auto
     // https://id3.org/
     // https://en.wikipedia.org/wiki/APE_tag
-    scan_directory(MP3_files_dir_path);
+    scan_directory(MP3_FILES_DIR_PATH);
 
   }
   else {
