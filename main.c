@@ -19,6 +19,7 @@ int main() {
     printf("Your current library:\n");
     print_library(library);
 
+    printf("-------\n");
     printf("What would you like to do? (enter corresponding number)\n");
     printf("-------\n");
     printf("1 - Play song\n");
@@ -26,7 +27,7 @@ int main() {
     printf("3 - Remove song\n");
     printf("4 - Create randomized playlist\n");
     printf("5 - Save library\n");
-    printf("6 - Quit\n");
+    printf("q - Quit\n");
     printf("-------\n> ");
     //printf("x - Delete account\n");
 
@@ -46,7 +47,7 @@ int main() {
     else if (strcmp(input, "5") == 0) {
       save_library(library);
     }
-    else if (strcmp(input, "6") == 0) {
+    else if (strcmp(input, "q") == 0) {
       return 0;
     }
     else {
