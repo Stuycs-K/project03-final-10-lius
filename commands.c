@@ -107,7 +107,7 @@ void add_song(struct song_node ** library) {
   }
   else {
     printf("\nInvalid command.\n");
-    printf("Try: 1 or 2\n\n");
+    printf("Try: 1 or 2\n");
   }
 
   printf("\n");
@@ -137,8 +137,9 @@ void remove_song(struct song_node ** library) {
 }
 
 void randomize_songs(struct song_node ** library) {
+  printf("\n");
   printf("Creating randomized playlist...\n");
-  printf("Your Randomized Playlist\n");
+  printf("Your Randomized Playlist:\n");
   shuffle(library); //kinda broken
   char input[256];
   printf("Would you like to save this playlist? (yes/no): ");
@@ -150,6 +151,7 @@ void randomize_songs(struct song_node ** library) {
 
 // save library to file
 void save_library(struct song_node ** library) {
+  printf("\n");
   printf("Saving library...\n");
   int fd = open("library_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
