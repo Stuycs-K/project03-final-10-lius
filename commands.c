@@ -10,6 +10,13 @@
 
 #define MP3_files_dir_path "./"
 
+char * concat(char *s1, char *s2) {
+  char *cat_str = malloc(strlen(s1) + strlen(s2) + 1);
+  strcpy(cat_str, s1);
+  strcat(cat_str, s2);
+  return cat_str;
+}
+
 /* returns true if file is an mp3 file */
 int is_mp3(char * filename) {
   char * extension = strrchr(filename, '.');
@@ -27,15 +34,21 @@ void scan_directory(char * path) {
   struct dirent *entry;
   while ((entry = readdir(d)) != NULL) {
     if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
-
+      char * file_path = concat(path, entry->d_name);
+      //...
+      free(file_path); // free memory allocated by concat
     }
   }
 }
 
 void play_song() {
-  char song[256];
+  getchar();
+  char *song = malloc(256);
   printf("Enter song to play: ");
   scanf("%[^\n]", song);
+  if (!is_mp3(song)) {
+    song = concat(song, ".mp3");
+  }
   //need to get mp3 file associated w/ inputted song name
   //if no mp3 file --> MP3 file does not exist
 
@@ -52,9 +65,12 @@ void play_song() {
     execvp("mpg123", args);
   }
   else { //parent
-    printf("Playing song...\n");
+    printf("Playing %s...\n", song); //bug: prints even when file no exist
+    printf("Press 'q' to quit and 'space' to pause\n");
     wait(NULL);
   }
+
+  free(song);
 
 }
 
@@ -103,7 +119,7 @@ void remove_song(struct song_node ** library) {
 void randomize_songs(struct song_node ** library) {
   printf("Creating randomized playlist...\n");
   printf("Your Randomized Playlist\n");
-  shuffle(library);
+  shuffle(library); //kinda broken
   char input[256];
   printf("Would you like to save this playlist? (yes/no): ");
   scanf("%s", input);

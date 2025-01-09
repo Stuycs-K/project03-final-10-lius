@@ -9,5 +9,6 @@ void save_library(struct song_node ** library);
 
 void scan_directory(char * path);
 int is_mp3(char * filename);
+char * concat(char *s1, char *s2);
 
 #endif

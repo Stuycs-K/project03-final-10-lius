@@ -23,7 +23,7 @@ int main() {
     printf("-------\n");
     printf("1 - Play song\n");
     printf("2 - Add song\n");
-    printf("2 - Remove song\n");
+    printf("3 - Remove song\n");
     printf("4 - Create randomized playlist\n");
     printf("5 - Save library\n");
     printf("6 - Quit\n");
@@ -51,7 +51,7 @@ int main() {
     }
     else {
       printf("\nInvalid command.\n");
-      printf("Try: 1, 2, or 3\n\n");
+      printf("Try: 1, 2, 3, 4, 5, or 6\n\n");
     }
 
   }
