@@ -126,9 +126,7 @@ void shuffle(struct song_node ** library) {
 }
 
 int delete_song(struct song_node ** library, char * artist, char * title ) {
-  printf("removing: [%s: %s] \n", artist, title);
   int song_found_staus = delete(&library[first_letter(artist[0])], artist, title);
-  print_library(library);
   return song_found_staus;
 }
 

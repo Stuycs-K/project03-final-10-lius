@@ -42,7 +42,7 @@ void scan_directory(char * path) {
 }
 
 void play_song() {
-  getchar();
+  getchar(); // clear newline character left by previous scanf
   char *song = malloc(256);
   printf("Enter song to play: ");
   scanf("%[^\n]", song);
@@ -113,7 +113,24 @@ void add_song(struct song_node ** library) {
 }
 
 void remove_song(struct song_node ** library) {
+  //if lib size = 0 --> say cant remove anymore songs
+  getchar(); // clear newline character left by previous scanf
+  char title[256];
+  printf("Enter song title: ");
+  scanf("%[^\n]", title);
+  getchar();
+  char artist[256];
+  printf("Enter artist name: ");
+  scanf("%[^\n]", artist);
 
+  int has_song = delete_song(library, artist, title);
+  if (has_song) {
+    printf("\nRemoving: [%s: %s] \n", artist, title);
+  }
+  
+  printf("\n");
+
+  //LIB_SIZE++;
 }
 
 void randomize_songs(struct song_node ** library) {
