@@ -2,6 +2,8 @@ compile runme: main.o node.o library.o commands.o
 	@gcc -o runme main.o node.o library.o commands.o
 main.o: main.c node.h library.h commands.h
 	@gcc -c main.c
+commands.o: commands.c node.h library.h
+	@gcc -c commands.c
 library.o: library.c node.h
 	@gcc -c library.c
 node.o: node.c

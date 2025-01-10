@@ -10,6 +10,8 @@
 
 #define MP3_FILES_DIR_PATH "songs/"
 
+int LIB_SIZE = 0;
+
 char * concat(char *s1, char *s2) {
   char *cat_str = (char *)malloc(strlen(s1) + strlen(s2) + 1);
   strcpy(cat_str, s1);
@@ -49,6 +51,8 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
     printf("ID3v1 tag not found in file: %s\n", file_path);
   }
   fclose(file);
+
+  LIB_SIZE++;
 }
 
 // void extract_metadata_id3v2(char * file_path, struct song_node ** library) {
@@ -103,6 +107,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 //     printf("ID3v2 tag not found in file: %s\n", file_path);
 //   }
 // fclose(file);
+// LIB_SIZE++;
 // }
 
 /* Scans for mp3 files in given directory */
@@ -182,6 +187,8 @@ void add_song(struct song_node ** library) {
     printf("Enter artist name: ");
     scanf("%[^\n]", artist);
     add(library, artist, title);
+
+    LIB_SIZE++;
   }
   else if (strcmp(input, "2") == 0) {
     //auto
@@ -196,8 +203,6 @@ void add_song(struct song_node ** library) {
   }
 
   printf("\n");
-
-  //LIB_SIZE++;
 }
 
 void remove_song(struct song_node ** library) {
@@ -218,14 +223,14 @@ void remove_song(struct song_node ** library) {
 
   printf("\n");
 
-  //LIB_SIZE++;
+  LIB_SIZE--;
 }
 
 void randomize_songs(struct song_node ** library) {
   printf("\n");
   printf("Creating randomized playlist...\n");
   printf("Your Randomized Playlist:\n");
-  shuffle(library); //kinda broken
+  shuffle(library, LIB_SIZE); //kinda broken
   char input[256];
   printf("Would you like to save this playlist? (yes/no): ");
   scanf("%s", input);
@@ -244,8 +249,8 @@ void save_library(struct song_node ** library) {
     return;
   }
 
-  //for (int i = 0; i < LIB_SIZE; i++) {
-  for (int i = 0; i < 27; i++) {
+  for (int i = 0; i < LIB_SIZE; i++) {
+  //for (int i = 0; i < 27; i++) {
     if (library[i] != NULL) {
       dprintf(fd, "%c: ", i + 96);
       song_list_to_file(library[i], fd);
