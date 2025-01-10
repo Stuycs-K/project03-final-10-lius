@@ -59,7 +59,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 //   fread(header, 1, 10, file);
 //   if (memcmp(header, "ID3", 3) == 0) {
 //     unsigned int size = ((header[6] & 0x7f) << 21) | ((header[7] & 0x7f) << 14) | ((header[8] & 0x7f) << 7) | (header[9] & 0x7f);
-    
+
 //     // read the rest of the ID3v2 frame data
 //     unsigned char *frame_data = malloc(size);
 //     fread(frame_data, 1, size, file);
@@ -188,7 +188,7 @@ void add_song(struct song_node ** library) {
     char * title = (char*)malloc(256);
     printf("Enter song title: ");
     int valid_input = scanf("%[^\n]", title);
-    if (!valid_input) title = ""; //handle user inputting nothing
+    if (!valid_input) title = ""; //handle user inputting nothing. doesnt rlly work!
     getchar();
     char artist[256];
     printf("Enter artist name: ");
@@ -215,24 +215,29 @@ void add_song(struct song_node ** library) {
 }
 
 void remove_song(struct song_node ** library) {
-  //if lib size = 0 --> say cant remove anymore songs
-  getchar(); // clear newline character left by previous scanf
-  char title[256];
-  printf("Enter song title: ");
-  scanf("%[^\n]", title);
-  getchar();
-  char artist[256];
-  printf("Enter artist name: ");
-  scanf("%[^\n]", artist);
-
-  int has_song = delete_song(library, artist, title);
-  if (has_song) {
-    printf("\nRemoving: [%s: %s] \n", artist, title);
+  if (LIB_SIZE <= 0) {
+    printf("\nThere are no songs to remove.\n\n");
+    return;
   }
+  else {
+    getchar(); // clear newline character left by previous scanf
+    char title[256];
+    printf("Enter song title: ");
+    scanf("%[^\n]", title);
+    getchar();
+    char artist[256];
+    printf("Enter artist name: ");
+    scanf("%[^\n]", artist);
 
-  printf("\n");
+    int has_song = delete_song(library, artist, title);
+    if (has_song) {
+      printf("\nRemoving: [%s: %s] \n", artist, title);
+    }
 
-  LIB_SIZE--;
+    printf("\n");
+
+    LIB_SIZE--;
+  }
 }
 
 void randomize_songs(struct song_node ** library) {
