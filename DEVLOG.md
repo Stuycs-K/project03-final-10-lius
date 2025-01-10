@@ -12,7 +12,7 @@ Added randomize playlist functionality (yet to be tested), started work on play_
 Added save library functionality, added remove song functionality, added basic outline for saving randomized playlist, started work on automatically adding songs functionality (created function for checking if mp3 file or not and started function scanning given directory for mp3 files), tested functions and fixed bugs (input bugs, infinite loop in shuffle()). (2 hr)
 
 ### 2025-01-09 - id3v1 and id3v2 extraction, randomize playlist
-Added id3v1 metadata extraction function and finished scan directory function and can now auto add songs that way. Tried id3v2 extraction but could not get it to work. Continued to work on randomizing playlist functionality.
+Added id3v1 metadata extraction function and finished scan directory function and can now auto add songs that way. Tried id3v2 extraction but could not get it to work. Continued to work on randomizing playlist functionality (2.8 hr)
 
 ### 2025-01-10 - Brief description
 Expanded description including how much time was spent on task.
