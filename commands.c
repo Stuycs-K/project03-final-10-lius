@@ -23,17 +23,91 @@ int is_mp3(char * filename) {
   return (extension && strcmp(extension, ".mp3") == 0); // check if has extension and that extension is an mp3
 }
 
-void extract_metadata(FILE * file) {
-  char * header[100];
-  fseek(file, 0, SEEK_SET);
-  fread(header, 1, 10, file);
-  if (memcmp(header, "ID3", 3) == 0) {
+// extract ID3v1 tag from the end of the file
+void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
+  FILE * file = fopen(file_path, "rb");
 
+  fseek(file, -128, SEEK_END);
+  char tag[128];
+  fread(tag, 1, 128, file);
+
+  if (memcmp(tag, "TAG", 3) == 0) {
+      // extract title, artist, and album from the ID3v1 tag
+      char title[31], artist[31];
+      memcpy(title, tag + 3, 30);
+      memcpy(artist, tag + 33, 30);
+
+      title[30] = '\0';
+      artist[30] = '\0';
+
+      printf("File: %s\n", file_path);
+      printf("Artist: %s\n", artist);
+      printf("Title: %s\n", title);
+
+      add(library, artist, title);
+  } else {
+    printf("ID3v1 tag not found in file: %s\n", file_path);
   }
+  fclose(file);
 }
 
+// void extract_metadata_id3v2(char * file_path, struct song_node ** library) {
+//   FILE * file = fopen(file_path, "rb");
+
+//   char header[10];
+//   fseek(file, 0, SEEK_SET);
+//   fread(header, 1, 10, file);
+//   if (memcmp(header, "ID3", 3) == 0) {
+//     unsigned int size = ((header[6] & 0x7f) << 21) | ((header[7] & 0x7f) << 14) | ((header[8] & 0x7f) << 7) | (header[9] & 0x7f);
+    
+//     // read the rest of the ID3v2 frame data
+//     unsigned char *frame_data = malloc(size);
+//     fread(frame_data, 1, size, file);
+
+//     // ID3v2 frame format: [frame id (4 bytes)][size (4 bytes)][data]
+//     unsigned int offset = 0;
+
+//     char * title;
+//     char * artist;
+
+//     // search for "TIT2" (Title frame) and "TPE1" (Artist frame) in the frame data
+//     while (offset + 10 <= size) {
+//       char frame_id[5];
+//       unsigned int frame_size;
+//       memcpy(frame_id, frame_data + offset, 4);
+//       frame_id[4] = '\0';
+//       frame_size = (frame_data[offset + 4] << 24) | (frame_data[offset + 5] << 16) | (frame_data[offset + 6] << 8) | frame_data[offset + 7];
+
+//       printf("%s\n", frame_id);
+
+//       if (strcmp(frame_id, "TIT2") == 0) {
+//         title = (char *)malloc(frame_size + 1);
+//         memcpy(title, frame_data + offset + 10, frame_size);
+//         title[frame_size] = '\0';
+//         printf("Title: %s\n", title);
+//         //free(title);
+//       } else if (strcmp(frame_id, "TPE1") == 0) {
+//         artist = (char *)malloc(frame_size + 1);
+//         memcpy(artist, frame_data + offset + 10, frame_size);
+//         artist[frame_size] = '\0';
+//         printf("Artist: %s\n", artist);
+//         //free(artist);
+//       }
+
+//       offset += 10 + frame_size;
+//     }
+//     free(frame_data);
+//     add(library, artist, title);
+//   }
+//   else {
+//     printf("ID3v2 tag not found in file: %s\n", file_path);
+//   }
+// fclose(file);
+// }
+
 /* Scans for mp3 files in given directory */
-void scan_directory(char * path) {
+void scan_directory(char * path, struct song_node ** library) {
+  printf("%s\n", path);
   DIR * d = opendir(path);
   if (path == NULL) {
     perror("Error opening directory\n");
@@ -44,8 +118,9 @@ void scan_directory(char * path) {
   while ((entry = readdir(d)) != NULL) {
     if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
       char * file_path = concat(path, entry->d_name);
-      FILE * file = fopen(file_path, "r");
-      extract_metadata(file);
+      printf("%s\n", file_path);
+      //extract_metadata_id3v2(file_path, library);
+      extract_metadata_id3v1(file_path, library);
       free(file_path); // free memory allocated by concat
     }
   }
@@ -112,7 +187,7 @@ void add_song(struct song_node ** library) {
     //auto
     // https://id3.org/
     // https://en.wikipedia.org/wiki/APE_tag
-    scan_directory(MP3_FILES_DIR_PATH);
+    scan_directory(MP3_FILES_DIR_PATH, library);
 
   }
   else {
