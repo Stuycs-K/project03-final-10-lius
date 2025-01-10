@@ -150,15 +150,15 @@ void play_song() {
   }
   if (pid == 0) {
     // prepare argument list for exec
-    char *args[] = {"mpg123", song_path, NULL};
+    char *args[] = {"mpg123", "-q", song_path, NULL};
 
     // execute mpg123 program to play the MP3 file
     execvp("mpg123", args);
   }
   else { //parent
     printf("-\n");
-    //printf("Playing %s...\n", song); //bug: prints even when file no exist
-    printf("Press 'q' to quit and 'space' to pause\n");
+    printf("Playing %s...\n", song); //bug: prints even when file no exist
+    printf("Press 'q' to quit and 'space' to pause. 'h' for more functions\n");
     printf("-\n");
     wait(NULL);
   }
