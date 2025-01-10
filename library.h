@@ -14,4 +14,7 @@ void shuffle(struct song_node ** library, int n);
 int delete_song(struct song_node ** library, char* artist, char* title);
 int reset(struct song_node ** library);
 
+int in_ary(struct song_node ** ary, int size, struct song_node * song);
+void real_shuffle(struct song_node ** library, int n);
+
 #endif
