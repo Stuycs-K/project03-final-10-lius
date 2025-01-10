@@ -42,10 +42,6 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
       title[30] = '\0';
       artist[30] = '\0';
 
-      printf("File: %s\n", file_path);
-      printf("Artist: %s\n", artist);
-      printf("Title: %s\n", title);
-
       add(library, artist, title);
   } else {
     printf("ID3v1 tag not found in file: %s\n", file_path);
@@ -112,7 +108,10 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 
 /* Scans for mp3 files in given directory */
 void scan_directory(char * path, struct song_node ** library) {
-  printf("%s\n", path);
+  //printf("%s\n", path);
+
+  int has_mp3 = 0;
+
   DIR * d = opendir(path);
   if (path == NULL) {
     perror("Error opening directory\n");
@@ -122,12 +121,17 @@ void scan_directory(char * path, struct song_node ** library) {
   struct dirent *entry;
   while ((entry = readdir(d)) != NULL) {
     if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
+      has_mp3 = 1;
       char * file_path = concat(path, entry->d_name);
-      printf("%s\n", file_path);
+      //printf("%s\n", file_path);
       //extract_metadata_id3v2(file_path, library);
       extract_metadata_id3v1(file_path, library);
       free(file_path); // free memory allocated by concat
     }
+  }
+
+  if (!has_mp3) {
+    printf("No mp3 files found.\n");
   }
 }
 
@@ -164,6 +168,7 @@ void play_song() {
   }
 
   free(song);
+  printf("\n");
 
 }
 
@@ -179,27 +184,31 @@ void add_song(struct song_node ** library) {
   scanf("%s", input);
   if (strcmp(input, "1") == 0) {
     getchar(); // clear newline character left by previous scanf
-    char title[256];
+    //char title[256];
+    char * title = (char*)malloc(256);
     printf("Enter song title: ");
-    scanf("%[^\n]", title);
+    int valid_input = scanf("%[^\n]", title);
+    if (!valid_input) title = ""; //handle user inputting nothing
     getchar();
     char artist[256];
     printf("Enter artist name: ");
     scanf("%[^\n]", artist);
     add(library, artist, title);
 
+    //free(title);
     LIB_SIZE++;
   }
   else if (strcmp(input, "2") == 0) {
     //auto
     // https://id3.org/
     // https://en.wikipedia.org/wiki/APE_tag
+    printf("\nAdding songs...\n");
     scan_directory(MP3_FILES_DIR_PATH, library);
 
   }
   else {
     printf("\nInvalid command.\n");
-    printf("Try: 1 or 2\n");
+    //printf("Try: 1 or 2\n");
   }
 
   printf("\n");

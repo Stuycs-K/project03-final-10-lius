@@ -85,43 +85,43 @@ void real_shuffle(struct song_node ** library, int n) {
 }
 
 int in_ary(int * ary, int size, char element) {
-  for (int i = 0; i < size; i++) {
-    if (strcmp(element, ary[i]) == 0) {
-      return 0;
-    }
-  }
-  return 1;
+  // for (int i = 0; i < size; i++) {
+  //   if (strcmp(element, ary[i]) == 0) {
+  //     return 0;
+  //   }
+  // }
+  // return 1;
 }
 
 void shuffle(struct song_node ** library, int n) {
-  struct song_node * all_songs[1000];
-  int count = 0;
-  for (int i = 0; i < MAX_LIB_SIZE; i++) {
-    struct song_node * current = library[i];
-    while (current != NULL) {
-      all_songs[count++] = current;
-      current = current->next;
-    }
-  }
-  if (count == 0) return; //library empty
-  int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-  char used_indexes[n];
-  for (int i = 0; i < n; i++) {
-    int random_index = rand() % count;
-    int status = in_ary(used_indexes, n, all_songs[random_index]);
-    if (!status) {
-      used_indexes[i] = random_index;
-      char line[100];
-      sprintf(line, "%d. {%s, %s}\n", i+1, all_songs[random_index]->artist, all_songs[random_index]->title);
-      printf("%s", line);
-      write(fd, line, sizeof(line));
-    }
-    else {
-      i--;
-    }
-  }
-  close(fd);
-  printf("\n");
+  // struct song_node * all_songs[1000];
+  // int count = 0;
+  // for (int i = 0; i < MAX_LIB_SIZE; i++) {
+  //   struct song_node * current = library[i];
+  //   while (current != NULL) {
+  //     all_songs[count++] = current;
+  //     current = current->next;
+  //   }
+  // }
+  // if (count == 0) return; //library empty
+  // int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  // char used_indexes[n];
+  // for (int i = 0; i < n; i++) {
+  //   int random_index = rand() % count;
+  //   int status = in_ary(used_indexes, n, all_songs[random_index]);
+  //   if (!status) {
+  //     used_indexes[i] = random_index;
+  //     char line[100];
+  //     sprintf(line, "%d. {%s, %s}\n", i+1, all_songs[random_index]->artist, all_songs[random_index]->title);
+  //     printf("%s", line);
+  //     write(fd, line, sizeof(line));
+  //   }
+  //   else {
+  //     i--;
+  //   }
+  // }
+  // close(fd);
+  // printf("\n");
 }
 
 int delete_song(struct song_node ** library, char * artist, char * title ) {

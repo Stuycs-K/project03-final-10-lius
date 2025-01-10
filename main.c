@@ -20,7 +20,7 @@ int main() {
     print_library(library);
 
     printf("-------\n");
-    printf("What would you like to do? (enter corresponding number)\n");
+    printf("What would you like to do? (enter corresponding number/letter)\n");
     printf("-------\n");
     printf("1 - Play song\n");
     printf("2 - Add song\n");
@@ -52,7 +52,7 @@ int main() {
     }
     else {
       printf("\nInvalid command.\n");
-      printf("Try: 1, 2, 3, 4, 5, or 6\n\n");
+      printf("Try: 1, 2, 3, 4, 5, or q\n\n");
     }
 
   }
