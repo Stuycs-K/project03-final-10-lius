@@ -42,6 +42,9 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
       title[30] = '\0';
       artist[30] = '\0';
 
+      printf("00%s00, ", artist);
+      printf("00%s00\n", title);
+
       add(library, artist, title);
   } else {
     printf("ID3v1 tag not found in file: %s\n", file_path);

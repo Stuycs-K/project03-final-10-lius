@@ -85,13 +85,17 @@ void real_shuffle(struct song_node ** library, int n) {
 }
 
 int in_ary(struct song_node ** ary, int size, struct song_node * song) {
+  struct song_node * arry[size];
   for (int i = 0; i < size; i++) {
-    if ((strcmp(song->artist, ary[i]->artist) == 0) &&
-    (strcmp(song->title, ary[i]->title) == 0)) {
-      return 0;
+    printf("%s %s\n", song->artist, arry[i]->artist);
+    printf("%s %s\n", song->title, arry[i]->title);
+    if ((strcmp(song->artist, arry[i]->artist) == 0) &&
+    (strcmp(song->title, arry[i]->title) == 0)) {
+      return 1;
     }
   }
-  return 1;
+  printf("AAA\n");
+  return 0;
 }
 
 void shuffle(struct song_node ** library, int n) {
@@ -106,13 +110,14 @@ void shuffle(struct song_node ** library, int n) {
   }
   if (count == 0) return; //library empty
   int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-  struct song_node * used_indexes[n];
+  struct song_node * used_songs[n];
   for (int i = 0; i < n; i++) {
     int random_index = rand() % count;
-    int status = in_ary(used_indexes, n, all_songs[random_index]);
+    int status = in_ary(used_songs, n, all_songs[random_index]);
     printf("ahsdahsd\n");
     if (!status) {
-      used_indexes[i] = all_songs[random_index];
+      printf("BBBB\n");
+      used_songs[i] = all_songs[random_index];
       char line[256];
       sprintf(line, "%d. {%s, %s}\n", i+1, all_songs[random_index]->artist, all_songs[random_index]->title);
       printf("%s", line);
