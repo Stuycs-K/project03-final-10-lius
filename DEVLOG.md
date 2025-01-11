@@ -14,6 +14,9 @@ Added save library functionality, added remove song functionality, added basic o
 ### 2025-01-09 - id3v1 and id3v2 extraction, randomize playlist
 Added id3v1 metadata extraction function and finished scan directory function and can now auto add songs that way. Tried id3v2 extraction but could not get it to work. Continued to work on randomizing playlist functionality (2.8 hr)
 
+### 2025-01-10 - randomize playlist, remove song update
+Continued to work on randomizing playlist functionality -- re-worked in_ary function. Updated remove_song() to have separate print statement for when library has no songs.
+
 ### 2025-01-10 - Brief description
 Expanded description including how much time was spent on task.
 
