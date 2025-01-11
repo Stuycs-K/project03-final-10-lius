@@ -7,18 +7,18 @@
 #include <ctype.h>
 #include "node.h"
 
-#define MAX_LIB_SIZE 27
+#define LIB_SIZE 27 // library array has 27 indexes. index 0 is non alphabetical, index 1 thru 26 is A thru Z respectively. songs sorted by artists alphabetically in library
 
 struct song_node ** init(){
-  struct song_node ** songArr = (struct song_node**)malloc(MAX_LIB_SIZE*sizeof(struct song_node));
-  for(int i = 0; i < MAX_LIB_SIZE; i ++){
+  struct song_node ** songArr = (struct song_node**)malloc(LIB_SIZE*sizeof(struct song_node));
+  for (int i = 0; i < LIB_SIZE; i ++) {
     songArr[i] = NULL;
   }
   return songArr;
 }
 
 int first_letter(char c){
-  if(!isalpha(c)){
+  if (!isalpha(c)) {
     return 0;
   }
   return toupper(c) - 64;
@@ -45,19 +45,19 @@ void print_artist(struct song_node ** library, char * artist) {
   printf("%s: ", artist);
   struct song_node * current = search_artist(library, artist);
   if (current == NULL) {
-      printf("\n\n");
-      return;
+    printf("\n\n");
+    return;
   }
   printf("[ ");
   while (current->next != NULL && strcasecmp(current->next->artist, artist) == 0) {
-      printf("{%s, %s} | ", current->artist, current->title);
-      current = current->next;
+    printf("{%s, %s} | ", current->artist, current->title);
+    current = current->next;
   }
   printf("{%s, %s} ]\n\n", current->artist, current->title);
 }
 
 void print_library(struct song_node ** library) {
-  for (int i = 0; i < MAX_LIB_SIZE; i++) {
+  for (int i = 0; i < LIB_SIZE; i++) {
     if (library[i] != NULL) {
       printf("%c: ", i + 96);
       print_song_list(library[i]);
@@ -69,7 +69,7 @@ void print_library(struct song_node ** library) {
 void real_shuffle(struct song_node ** library, int n) {
   struct song_node * all_songs[1000];
   int count = 0;
-  for (int i = 0; i < MAX_LIB_SIZE; i++) {
+  for (int i = 0; i < LIB_SIZE; i++) {
     struct song_node * current = library[i];
     while (current != NULL) {
       all_songs[count++] = current;
@@ -84,48 +84,44 @@ void real_shuffle(struct song_node ** library, int n) {
   printf("\n");
 }
 
-int in_ary(struct song_node ** ary, int size, struct song_node * song) {
-  struct song_node * arry[size];
-  for (int i = 0; i < size; i++) {
-    printf("%s %s\n", song->artist, arry[i]->artist);
-    printf("%s %s\n", song->title, arry[i]->title);
-    if ((strcmp(song->artist, arry[i]->artist) == 0) &&
-    (strcmp(song->title, arry[i]->title) == 0)) {
-      return 1;
-    }
-  }
-  printf("AAA\n");
-  return 0;
-}
+void shuffle(struct song_node ** library) {
+  srand(time(NULL));
 
-void shuffle(struct song_node ** library, int n) {
-  struct song_node * all_songs[MAX_LIB_SIZE];
-  int count = 0;
-  for (int i = 0; i < MAX_LIB_SIZE; i++) {
+  // go thru array of linked lists to create array of all songs in library in artist alphabetical order
+  struct song_node * all_songs[1000];
+  int count = 0; //song count
+  for (int i = 0; i < LIB_SIZE; i++) {
     struct song_node * current = library[i];
     while (current != NULL) {
       all_songs[count++] = current;
       current = current->next;
     }
   }
-  if (count == 0) return; //library empty
+
   int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-  struct song_node * used_songs[n];
-  for (int i = 0; i < n; i++) {
+  if (fd == -1) {
+    perror("error opening file for saving randomized playlist");
+    return;
+  }
+  
+  // until no songs left: getting random song, writing it to file & printing it, remove song from array
+  int i = 1;
+  while (count > 0) {
     int random_index = rand() % count;
-    int status = in_ary(used_songs, n, all_songs[random_index]);
-    printf("ahsdahsd\n");
-    if (!status) {
-      printf("BBBB\n");
-      used_songs[i] = all_songs[random_index];
-      char line[256];
-      sprintf(line, "%d. {%s, %s}\n", i+1, all_songs[random_index]->artist, all_songs[random_index]->title);
-      printf("%s", line);
-      write(fd, line, sizeof(line));
+
+    char line[300];
+    sprintf(line, "%d. {%s, %s}\n", i, all_songs[random_index]->artist, all_songs[random_index]->title);
+    printf("%s", line);
+    write(fd, line, sizeof(line));
+
+    // remove used song and shift elements to left to fill gap
+    for (int j = random_index; j < count-1; j++) {
+      all_songs[j] = all_songs[j + 1];
     }
-    else {
-      i--;
-    }
+
+    count--;
+    i++;
+
   }
   close(fd);
   printf("\n");
@@ -137,7 +133,7 @@ int delete_song(struct song_node ** library, char * artist, char * title ) {
 }
 
 void reset(struct song_node ** library) {
-  for (int i = 0; i < MAX_LIB_SIZE; i++) {
+  for (int i = 0; i < LIB_SIZE; i++) {
     if(library[i] != NULL){
       printf("freeing node: {%s, %s}\n",library[i]->artist,library[i]->title);
     }
