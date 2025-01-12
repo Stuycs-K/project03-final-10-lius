@@ -10,8 +10,8 @@
 #define LIB_SIZE 27 // library array has 27 indexes. index 0 is non alphabetical, index 1 thru 26 is A thru Z respectively. songs sorted by artists alphabetically in library
 
 struct song_node ** init() {
-  struct song_node ** songArr = (struct song_node**)malloc(LIB_SIZE*sizeof(struct song_node));
-  for (int i = 0; i < LIB_SIZE; i ++) {
+  struct song_node ** songArr = (struct song_node **)malloc(LIB_SIZE*sizeof(struct song_node));
+  for (int i = 0; i < LIB_SIZE; i++) {
     songArr[i] = NULL;
   }
   return songArr;
@@ -100,7 +100,7 @@ void shuffle(struct song_node ** library) {
 
   int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
-    perror("Error opening file to save randomized playlist");
+    perror("Error opening file to save randomized playlist\n");
     return;
   }
   

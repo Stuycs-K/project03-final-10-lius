@@ -5,32 +5,32 @@
 #include "node.h"
 
 struct song_node * insert_front(struct song_node * list, char * artist, char * title){
-  struct song_node * newSong = (struct song_node*)malloc(sizeof(struct song_node));
-  strcpy(newSong->title,title);
-  strcpy(newSong->artist,artist);
+  struct song_node * newSong = (struct song_node *)malloc(sizeof(struct song_node));
+  strcpy(newSong->title, title);
+  strcpy(newSong->artist, artist);
   newSong->next = list;
   return newSong;
 }
 
 int compare(struct song_node * a, struct song_node * b){
-  int c = strcasecmp(a->artist,b->artist);
-  if(c == 0){
-    return strcasecmp(a->title,b->title);
+  int c = strcasecmp(a->artist, b->artist);
+  if (c == 0) {
+    return strcasecmp(a->title, b->title);
   }
   return c;
 }
 
 struct song_node * insert_song(struct song_node * list, char * artist, char * title){
-  struct song_node * newSong = (struct song_node*)malloc(sizeof(struct song_node));
-  strcpy(newSong->title,title);
-  strcpy(newSong->artist,artist);
+  struct song_node * newSong = (struct song_node *)malloc(sizeof(struct song_node));
+  strcpy(newSong->title, title);
+  strcpy(newSong->artist, artist);
   struct song_node * p = list;
   struct song_node * prev = NULL;
-  if(list == NULL || compare(list,newSong) > 0){
+  if (list == NULL || compare(list, newSong) > 0) {
     newSong->next = list;
     return newSong;
   }
-  while(!(list == NULL || compare(list,newSong) > 0)){
+  while (!(list == NULL || compare(list, newSong) > 0)) {
     prev = list;
     list = list->next;
   }
@@ -45,11 +45,11 @@ void print_song_list(struct song_node * list){
     return;
   }
   printf("[ ");
-  while(list->next != NULL){
-    printf("{%s, %s} | ",list->artist,list->title);
+  while (list->next != NULL) {
+    printf("{%s, %s} | ",list->artist, list->title);
     list = list->next;
   }
-  printf("{%s, %s} ]\n",list->artist,list->title);
+  printf("{%s, %s} ]\n",list->artist, list->title);
 }
 
 void song_list_to_file(struct song_node * list, int fd){
@@ -58,16 +58,16 @@ void song_list_to_file(struct song_node * list, int fd){
     return;
   }
   dprintf(fd, "[ ");
-  while(list->next != NULL){
-    dprintf(fd, "{%s, %s} | ",list->artist,list->title);
+  while (list->next != NULL) {
+    dprintf(fd, "{%s, %s} | ", list->artist, list->title);
     list = list->next;
   }
-  dprintf(fd, "{%s, %s} ]\n",list->artist,list->title);
+  dprintf(fd, "{%s, %s} ]\n", list->artist, list->title);
 }
 
 struct song_node * find_song(struct song_node * list, char * artist, char * title){
   while(list != NULL){
-    if(strcmp(list->artist,artist) == 0 && strcmp(list->title,title) == 0){
+    if(strcmp(list->artist, artist) == 0 && strcmp(list->title, title) == 0){
       return list;
     }
     list = list->next;
@@ -77,7 +77,7 @@ struct song_node * find_song(struct song_node * list, char * artist, char * titl
 
 struct song_node * find_song_artist(struct song_node * list, char * artist) {
   while (list != NULL) {
-    if (strcasecmp(list->artist, artist) == 0){
+    if (strcasecmp(list->artist, artist) == 0) {
       return list;
     }
     list = list->next;

@@ -10,11 +10,8 @@ void print_letter(struct song_node ** library, char letter);
 void print_artist(struct song_node ** library, char * artist);
 void print_library(struct song_node ** library);
 void real_shuffle(struct song_node ** library, int n);
-
+void shuffle(struct song_node ** library);
 int delete_song(struct song_node ** library, char * artist, char * title);
 int reset(struct song_node ** library);
-
-void real_shuffle(struct song_node ** library, int n);
-void shuffle(struct song_node ** library);
 
 #endif

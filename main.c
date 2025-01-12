@@ -5,12 +5,11 @@
 #include <ctype.h>
 #include "node.h"
 #include "library.h"
-#include "commands.h"
+#include "commands.h" // song related commands
 
 int main() {
 
   struct song_node ** library = init();
-  //LIB_SIZE = 0;
 
   char input[256];
 
