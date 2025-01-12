@@ -20,8 +20,11 @@ Continued to work on randomizing playlist functionality -- reworked in_ary funct
 ### 2025-01-11 - randomize playlist
 Reworked shuffle() to instead remove used songs from within array rather than add to another array and search for if song has been used or not. Also, fixed its not writing to file properly issue. (40 min)
 
-### 2025-01-12 - Brief description
-Expanded description including how much time was spent on task.
+### 2025-01-12 - code clean-up
+Added comments, changed formatting of some code, changed some print statements. (20 min)
 
 ### 2025-01-13 - Brief description
+Expanded description including how much time was spent on task.
+
+### 2025-01-14 - Brief description
 Expanded description including how much time was spent on task.
