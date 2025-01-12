@@ -9,7 +9,7 @@
 
 #define LIB_SIZE 27 // library array has 27 indexes. index 0 is non alphabetical, index 1 thru 26 is A thru Z respectively. songs sorted by artists alphabetically in library
 
-struct song_node ** init(){
+struct song_node ** init() {
   struct song_node ** songArr = (struct song_node**)malloc(LIB_SIZE*sizeof(struct song_node));
   for (int i = 0; i < LIB_SIZE; i ++) {
     songArr[i] = NULL;
@@ -17,26 +17,26 @@ struct song_node ** init(){
   return songArr;
 }
 
-int first_letter(char c){
+int first_letter(char c) {
   if (!isalpha(c)) {
     return 0;
   }
   return toupper(c) - 64;
 }
 
-void add(struct song_node ** library, char * artist, char * title){
+void add(struct song_node ** library, char * artist, char * title) {
   library[first_letter(artist[0])] = insert_song(library[first_letter(artist[0])],artist,title);
 }
 
-struct song_node * search_song(struct song_node ** library, char * artist, char * title ){
+struct song_node * search_song(struct song_node ** library, char * artist, char * title ) {
   return find_song(library[first_letter(artist[0])],artist,title);
 }
 
-struct song_node * search_artist(struct song_node ** library, char * artist ){
+struct song_node * search_artist(struct song_node ** library, char * artist ) {
   return find_song_artist(library[first_letter(artist[0])],artist);
 }
 
-void print_letter(struct song_node ** library, char letter){
+void print_letter(struct song_node ** library, char letter) {
   print_song_list(library[first_letter(letter)]);
 }
 
@@ -100,7 +100,7 @@ void shuffle(struct song_node ** library) {
 
   int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
-    perror("error opening file for saving randomized playlist");
+    perror("Error opening file to save randomized playlist");
     return;
   }
   
@@ -112,7 +112,7 @@ void shuffle(struct song_node ** library) {
     char line[300];
     sprintf(line, "%d. {%s, %s}\n", i, all_songs[random_index]->artist, all_songs[random_index]->title);
     printf("%s", line);
-    write(fd, line, sizeof(line));
+    write(fd, line, strlen(line));
 
     // remove used song and shift elements to left to fill gap
     for (int j = random_index; j < count-1; j++) {
