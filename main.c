@@ -16,6 +16,7 @@ int main() {
   while (1) {
     printf("=====================\n");
     printf("Your current library:\n");
+    //printf("--- Your current library ---\n");
     print_library(library);
 
     printf("-------\n");

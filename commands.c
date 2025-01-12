@@ -264,7 +264,8 @@ void randomize_songs(struct song_node ** library) {
     return;
   }
   printf("Creating randomized playlist...\n");
-  printf("Your Randomized Playlist:\n");
+  //printf("Your Randomized Playlist:\n");
+  printf("\n--- Your Randomized Playlist ---\n");
   shuffle(library);
    
   char input[256];
@@ -279,6 +280,7 @@ void randomize_songs(struct song_node ** library) {
     if (remove("randomized_playlist_save.txt") != 0) {
       perror("Error deleting file for randomized playlist\n");
     }
+    printf("\n");
   }
 }
 
