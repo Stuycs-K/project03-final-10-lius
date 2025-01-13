@@ -12,8 +12,8 @@
 
 int LIB_SIZE = 0;
 
-/* Combines given 2 strings. First given string paramater is the start of the new combined string. 
- * Returns combined string. 
+/* Combines given 2 strings. First given string paramater is the start of the new combined string.
+ * Returns combined string.
  */
 char * concat(char * s1, char * s2) {
   char * cat_str = (char *)malloc(strlen(s1) + strlen(s2) + 1);
@@ -22,8 +22,8 @@ char * concat(char * s1, char * s2) {
   return cat_str;
 }
 
-/* Determines if file is an MP3 file or not. 
- * Returns true if file is an MP3 file. 
+/* Determines if file is an MP3 file or not.
+ * Returns true if file is an MP3 file.
  */
 int is_mp3(char * filename) {
   char * extension = strrchr(filename, '.');
@@ -117,8 +117,10 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 // LIB_SIZE++;
 // }
 
-/* Scans for MP3 files in given directory */
-void scan_directory(char * path, struct song_node ** library) {
+/* Scans for MP3 files in given directory.
+ * If finds MP3 file, gets its title and artsit
+*/
+void scan_directory_to_extract(char * path, struct song_node ** library) {
   int has_mp3 = 0;
 
   DIR * d = opendir(path);
@@ -131,11 +133,12 @@ void scan_directory(char * path, struct song_node ** library) {
   while ((entry = readdir(d)) != NULL) {
     if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
       has_mp3 = 1;
+      printf("FILE: %s\n", entry->d_name);
       char * file_path = concat(path, entry->d_name);
 
       //extract_metadata_id3v2(file_path, library);
       extract_metadata_id3v1(file_path, library);
-      
+
       free(file_path); // free memory allocated by concat
     }
   }
@@ -143,6 +146,27 @@ void scan_directory(char * path, struct song_node ** library) {
   if (!has_mp3) {
     printf("No mp3 files found.\n");
   }
+}
+
+/* Iterates through files in given directory.
+ * Returns true if given file is in directory
+*/
+int scan_directory_for_file(char * dir_path, char * file) {
+  DIR * d = opendir(dir_path);
+  if (dir_path == NULL) {
+    perror("Error opening directory\n");
+    return 0;
+  }
+
+  struct dirent * entry;
+  while ((entry = readdir(d)) != NULL) {
+    if (entry->d_type == DT_REG) {
+      if (strcmp(file, entry->d_name) == 0) {
+        return 1;
+      }
+    }
+  }
+  return 0;
 }
 
 /* Plays user inputted song by using mpg123 */
@@ -154,9 +178,13 @@ void play_song() {
   if (!is_mp3(song)) {
     song = concat(song, ".mp3");
   }
+
+  if (!scan_directory_for_file(MP3_FILES_DIR_PATH, song)) {
+    printf("MP3 file does not exist.\n\n");
+    return;
+  }
+
   char * song_path = concat(MP3_FILES_DIR_PATH, song);
-  //need to get mp3 file associated w/ inputted song name
-  //if no mp3 file --> MP3 file does not exist
 
   pid_t pid = fork();
   if (pid < 0) {
@@ -172,13 +200,16 @@ void play_song() {
   }
   else { // parent
     printf("-\n");
-    printf("Playing %s...\n", song); //bug: prints even when file no exist
+    printf("Playing %s...\n", song);
     printf("Press 'q' to quit and 'space' to pause. 'h' for more functions\n");
     printf("-\n");
     wait(NULL);
   }
 
+  // free memory allocated by concat
   free(song);
+  free(song_path);
+
   printf("\n");
 }
 
@@ -196,11 +227,11 @@ void add_song(struct song_node ** library) {
   if (strcmp(input, "1") == 0) {
     getchar(); // clear newline character left by previous scanf
     //char title[256];
-    char * title = (char*)malloc(256);
+    char * title = (char *)malloc(256);
     printf("Enter song title: ");
     int valid_input = scanf("%[^\n]", title);
     if (!valid_input) title = ""; //handle user inputting nothing. doesnt rlly work! <==========
-    
+
     getchar();
     char artist[256];
     printf("Enter artist name: ");
@@ -216,7 +247,7 @@ void add_song(struct song_node ** library) {
     // https://en.wikipedia.org/wiki/APE_tag
     // get rid of trailing spaces?
     printf("\nAdding songs...\n");
-    scan_directory(MP3_FILES_DIR_PATH, library);
+    scan_directory_to_extract(MP3_FILES_DIR_PATH, library);
   }
   else {
     printf("\nInvalid command.\n");
@@ -267,7 +298,7 @@ void randomize_songs(struct song_node ** library) {
   //printf("Your Randomized Playlist:\n");
   printf("\n--- Your Randomized Playlist ---\n");
   shuffle(library);
-   
+
   char input[256];
   printf("Would you like to save this playlist? (yes/no)\n");
   printf("> ");
