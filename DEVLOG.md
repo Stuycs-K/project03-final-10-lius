@@ -23,7 +23,10 @@ Reworked shuffle() to instead remove used songs from within array rather than ad
 ### 2025-01-12 - code clean-up
 Added comments, changed formatting of some code, changed some print statements. (20 min)
 
-### 2025-01-13 - Brief description
+### 2025-01-13 - bug fixes, started account functions
+Fixed issue of the print statements acting as if a song was playing when there wasn't by adding a new function, scan_directory_for_file which checks if mp3 file exists beforehand. Also, fixed weird printing artifact when user tries to add a song w/o inputting anything. Created function headers for the account functionalities.
+
+### 2025-01-14 - Brief description
 Expanded description including how much time was spent on task.
 
 ### 2025-01-14 - Brief description
