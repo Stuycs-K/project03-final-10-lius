@@ -135,7 +135,7 @@ void scan_directory_to_extract(char * path, struct song_node ** library) {
       has_mp3 = 1;
       char * file_path = concat(path, entry->d_name);
 
-      extract_metadata_id3v2(file_path, library);
+      //extract_metadata_id3v2(file_path, library);
       extract_metadata_id3v1(file_path, library);
 
       free(file_path); // free memory allocated by concat
