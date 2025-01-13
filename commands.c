@@ -235,7 +235,7 @@ void add_song(struct song_node ** library) {
     printf("Enter artist name: ");
     valid_input = scanf("%[^\n]", artist);
     if (!valid_input) artist = "";
-    
+
     add(library, artist, title);
 
     //free(title);
