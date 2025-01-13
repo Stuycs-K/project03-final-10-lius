@@ -133,7 +133,6 @@ void scan_directory_to_extract(char * path, struct song_node ** library) {
   while ((entry = readdir(d)) != NULL) {
     if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
       has_mp3 = 1;
-      printf("FILE: %s\n", entry->d_name);
       char * file_path = concat(path, entry->d_name);
 
       //extract_metadata_id3v2(file_path, library);
@@ -226,16 +225,17 @@ void add_song(struct song_node ** library) {
 
   if (strcmp(input, "1") == 0) {
     getchar(); // clear newline character left by previous scanf
-    //char title[256];
     char * title = (char *)malloc(256);
     printf("Enter song title: ");
     int valid_input = scanf("%[^\n]", title);
-    if (!valid_input) title = ""; //handle user inputting nothing. doesnt rlly work! <==========
+    if (!valid_input) title = "";
 
     getchar();
-    char artist[256];
+    char * artist = (char *)malloc(256);;
     printf("Enter artist name: ");
-    scanf("%[^\n]", artist);
+    valid_input = scanf("%[^\n]", artist);
+    if (!valid_input) artist = "";
+    
     add(library, artist, title);
 
     //free(title);
