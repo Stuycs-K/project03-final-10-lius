@@ -10,7 +10,7 @@
 
 #define MP3_FILES_DIR_PATH "songs/"
 
-int LIB_SIZE = 0;
+static int SONG_COUNT = 0;
 
 /* Combines given 2 strings. First given string paramater is the start of the new combined string.
  * Returns combined string.
@@ -31,8 +31,8 @@ int is_mp3(char * filename) {
 }
 
 /* Extracts ID3v1 tag from the end of MP3 file.
- * Gets MP3 file from given file path
- * Uses extracted data (artist and title) to add song to library
+ * Gets MP3 file from given file path.
+ * Uses extracted data (artist and title) to add song to library.
 */
 void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
   FILE * file = fopen(file_path, "rb");
@@ -59,7 +59,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
   }
   fclose(file);
 
-  LIB_SIZE++;
+  SONG_COUNT++;
 }
 
 // void extract_metadata_id3v2(char * file_path, struct song_node ** library) {
@@ -114,11 +114,11 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 //     printf("ID3v2 tag not found in file: %s\n", file_path);
 //   }
 // fclose(file);
-// LIB_SIZE++;
+// SONG_COUNT++;
 // }
 
 /* Scans for MP3 files in given directory.
- * If finds MP3 file, gets its title and artsit
+ * If finds MP3 file, gets its title and artist.
 */
 void scan_directory_to_extract(char * path, struct song_node ** library) {
   int has_mp3 = 0;
@@ -148,7 +148,7 @@ void scan_directory_to_extract(char * path, struct song_node ** library) {
 }
 
 /* Iterates through files in given directory.
- * Returns true if given file is in directory
+ * Returns true if given file is in directory.
 */
 int scan_directory_for_file(char * dir_path, char * file) {
   DIR * d = opendir(dir_path);
@@ -239,7 +239,7 @@ void add_song(struct song_node ** library) {
     add(library, artist, title);
 
     //free(title);
-    LIB_SIZE++;
+    SONG_COUNT++;
   }
   else if (strcmp(input, "2") == 0) {
     //auto
@@ -259,26 +259,28 @@ void add_song(struct song_node ** library) {
 
 /* Removes user inputted song from library */
 void remove_song(struct song_node ** library) {
-  if (LIB_SIZE <= 0) {
+  if (SONG_COUNT <= 0) {
     printf("\nThere are no songs to remove.\n\n");
     return;
   }
   else {
     getchar(); // clear newline character left by previous scanf
-    char title[256];
+    char * title = (char *)malloc(256);
     printf("Enter song title: ");
-    scanf("%[^\n]", title);
+    int valid_input = scanf("%[^\n]", title);
+    if (!valid_input) title = "";
 
     getchar();
-    char artist[256];
+    char * artist = (char *)malloc(256);;
     printf("Enter artist name: ");
-    scanf("%[^\n]", artist);
+    valid_input = scanf("%[^\n]", artist);
+    if (!valid_input) artist = "";
 
     int has_song = delete_song(library, artist, title);
     if (has_song) {
-      printf("\nRemoving: [%s: %s] \n\n", artist, title);
+      printf("\nRemoving: {%s, %s} \n\n", artist, title);
 
-      LIB_SIZE--;
+      SONG_COUNT--;
     }
     else {
       printf("\nSong not found.\n\n");
@@ -290,7 +292,7 @@ void remove_song(struct song_node ** library) {
 /* Prints songs from library in a randomized order */
 void randomize_songs(struct song_node ** library) {
   printf("\n");
-  if (LIB_SIZE <= 0) {
+  if (SONG_COUNT <= 0) {
     printf("There are no songs to create a randomized playlist with.\n\n");
     return;
   }
