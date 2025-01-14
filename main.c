@@ -10,6 +10,8 @@
 int main() {
 
   struct song_node ** library = init();
+  struct user ** account_lib = init_acct_lib();
+  //load_accounts(account_lib);
 
   char input[256];
 
@@ -53,12 +55,17 @@ int main() {
       reset(library);
       printf("Library cleared!\n\n");
     }
+    else if (strcmp(input, "7") == 0) {
+      login(account_lib);
+    }
+    else if (strcmp(input, "8") == 0) {
+      create_account(account_lib);
+    }
+    else if (strcmp(input, "9") == 0) {
+      save_accounts(account_lib);
+    }
     else if (strcmp(input, "q") == 0) {
       return 0;
-    }
-    else {
-      printf("\nInvalid command.\n");
-      printf("Try: 1, 2, 3, 4, 5, or q\n\n");
     }
 
   }
