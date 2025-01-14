@@ -27,6 +27,7 @@ int main() {
     printf("3 - Remove song\n");
     printf("4 - Create randomized playlist\n");
     printf("5 - Save library\n");
+    printf("6 - Clear library\n");
     printf("q - Quit\n");
     printf("-------\n> ");
     //printf("x - Delete account\n");
@@ -46,6 +47,11 @@ int main() {
     }
     else if (strcmp(input, "5") == 0) {
       save_library(library);
+    }
+    else if (strcmp(input, "6") == 0) { //added ability to clear library
+      printf("Clearing library...\n");
+      reset(library);
+      printf("Library cleared!\n\n");
     }
     else if (strcmp(input, "q") == 0) {
       return 0;
