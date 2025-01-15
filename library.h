@@ -1,7 +1,7 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-struct song_node ** init();
+struct song_node ** init_song_lib(); 
 int first_letter(char c);
 void add(struct song_node ** library, char * artist, char * title);
 struct song_node * search_song(struct song_node ** library, char * artist, char * title);

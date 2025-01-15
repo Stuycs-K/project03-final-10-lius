@@ -9,7 +9,7 @@
 
 int main() {
 
-  struct song_node ** library = init();
+  struct song_node ** library = init_song_lib();
   struct user ** account_lib = init_acct_lib();
   //load_accounts(account_lib);
 
@@ -37,7 +37,7 @@ int main() {
     scanf("%s", input);
     if (strcmp(input, "1") == 0) {
       play_song();
-    } 
+    }
     else if (strcmp(input, "2") == 0) {
       add_song(library);
     }
@@ -196,4 +196,3 @@ int main() {
 //   printf("CLEAR LIBRARY:\n");
 //   reset(library);
 //   print_library(library);
-

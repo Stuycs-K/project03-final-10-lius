@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "library.h"
 
 #define SAVED_ACCOUNTS "accounts.dat"
 #define MAX_USERS 100
@@ -10,7 +12,7 @@ static int total_users = 0; // current amount of created accounts
 
 struct user {char username[MAX_USERNAME_LEN]; char password[MAX_PWD_LEN]; struct song_node ** library;};
 
-struct user ** init() {
+struct user ** init_acct_lib() {
   struct user ** user_arr = (struct user **)malloc(MAX_USERS*sizeof(struct user));
   for (int i = 0; i < MAX_USERS; i ++) {
     user_arr[i] = NULL;
@@ -101,10 +103,39 @@ void create_account(struct user ** account_lib) {
   printf("Account created!\n");
 }
 
-void login();
-void update_account(); //save to account
+void login(struct user ** account_lib) {
+  getchar(); // clear newline character left by previous scanf
+  char username[256];
+  printf("Enter username: ");
+  scanf("%[^\n]", username);
 
-void save_account(struct user ** account_lib) {
+  getchar();
+  char password[256];
+  printf("Enter password: ");
+  scanf("%[^\n]", password);
+
+  for (int i = 0; i < total_users; i++) {
+    if ((strcmp(username, account_lib[i]->username) == 0) && strcmp(password, account_lib[i]->password) == 0) {
+      printf("\nLogin successful!\n\n");
+      return;
+    }
+  }
+
+  printf("\nInvalid username or password.\n\n");
+}
+
+//save to account
+void update_account(struct user ** account_lib, int curr_user_index, struct song_node ** library) {
+  if (curr_user_index == -1) {
+    return;
+  }
+  else {
+    printf("autosaving...\n");
+    account_lib[curr_user_index]->library = library;
+  }
+}
+
+void save_accounts(struct user ** account_lib) {
   FILE * file = fopen(SAVED_ACCOUNTS, "wb");
   if (file == NULL) {
     printf("Error saving accounts to file\n");
