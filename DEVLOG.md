@@ -26,8 +26,11 @@ Added comments, changed formatting of some code, changed some print statements. 
 ### 2025-01-13 - bug fixes, started account functions
 Fixed issue of the print statements acting as if a song was playing when there wasn't by adding a new function, scan_directory_for_file which checks if mp3 file exists beforehand. Also, fixed weird printing artifact when user tries to add a song w/o inputting anything. Created function headers for the account functionalities.
 
-### 2025-01-14 - Brief description
+### 2025-01-14 - account functions, clear library, variable renaming
+Added init, save_account and load_account and create account functions, added calls to account functions in main, added clear library functionality in main, renamed LIB_SIZE in commands.c to SONG_COUNT
+
+### 2025-01-15 - Brief description
 Expanded description including how much time was spent on task.
 
-### 2025-01-14 - Brief description
+### 2025-01-16 - Brief description
 Expanded description including how much time was spent on task.
