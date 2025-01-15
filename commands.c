@@ -10,7 +10,7 @@
 
 #define MP3_FILES_DIR_PATH "songs/"
 
-static int SONG_COUNT = 0;
+static int song_count = 0;
 
 /* Combines given 2 strings. First given string paramater is the start of the new combined string.
  * Returns combined string.
@@ -59,7 +59,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
   }
   fclose(file);
 
-  SONG_COUNT++;
+  song_count++;
 }
 
 // void extract_metadata_id3v2(char * file_path, struct song_node ** library) {
@@ -114,7 +114,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 //     printf("ID3v2 tag not found in file: %s\n", file_path);
 //   }
 // fclose(file);
-// SONG_COUNT++;
+// song_count++;
 // }
 
 /* Scans for MP3 files in given directory.
@@ -239,7 +239,7 @@ void add_song(struct song_node ** library) {
     add(library, artist, title);
 
     //free(title);
-    SONG_COUNT++;
+    song_count++;
   }
   else if (strcmp(input, "2") == 0) {
     //auto
@@ -259,7 +259,7 @@ void add_song(struct song_node ** library) {
 
 /* Removes user inputted song from library */
 void remove_song(struct song_node ** library) {
-  if (SONG_COUNT <= 0) {
+  if (song_count <= 0) {
     printf("\nThere are no songs to remove.\n\n");
     return;
   }
@@ -280,7 +280,7 @@ void remove_song(struct song_node ** library) {
     if (has_song) {
       printf("\nRemoving: {%s, %s} \n\n", artist, title);
 
-      SONG_COUNT--;
+      song_count--;
     }
     else {
       printf("\nSong not found.\n\n");
@@ -292,7 +292,7 @@ void remove_song(struct song_node ** library) {
 /* Prints songs from library in a randomized order */
 void randomize_songs(struct song_node ** library) {
   printf("\n");
-  if (SONG_COUNT <= 0) {
+  if (song_count <= 0) {
     printf("There are no songs to create a randomized playlist with.\n\n");
     return;
   }
@@ -301,7 +301,7 @@ void randomize_songs(struct song_node ** library) {
   printf("\n--- Your Randomized Playlist ---\n");
   shuffle(library);
 
-  char input[256];
+  char input[10];
   printf("Would you like to save this playlist? (yes/no)\n");
   printf("> ");
   scanf("%s", input);
