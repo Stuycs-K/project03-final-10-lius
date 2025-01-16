@@ -145,20 +145,28 @@ void reset(struct song_node ** library) {
 
 void load_song_library(struct song_node ** library, FILE * file) {
     char artist[100], title[100];
+    int len, len2;
 
     while (1) {
-        size_t artist_len = fread(artist, sizeof(char), 9, file);
+        fread(&len, sizeof(int), 1, file);
+        printf("%d\n", len);
+
+        size_t artist_len = fread(artist, sizeof(char), len, file);
         if (artist_len == 0) {
-            break;  // end of songs
+            break;
         }
 
         printf("%s\n", artist);
 
-        size_t title_len = fread(title, sizeof(char), 30, file);
+        fread(&len2, sizeof(int), 1, file);
+        printf("%d\n", len2);
+
+        size_t title_len = fread(title, sizeof(char), len2, file);
 
         printf("%ld, %ld\n", artist_len, title_len);
+        //printf("%d, %d\n", len, len2);
         printf("%s, %s,\n", artist, title);
-        add(library, artist, title);  // Add the song to the library
+        add(library, artist, title);
     }
 }
 
@@ -172,7 +180,13 @@ void save_song_library(struct song_node ** library, FILE * file) {
             printf("%s, %s,\n", current->artist, current->title);
             printf("%lu\n", strlen(current->artist));
             printf("%lu\n", strlen(current->title));
+            int len = strlen(current->artist);
+            int len2 = strlen(current->title);
+            printf("%d, %d\n", len, len2);
+            fwrite(&len, sizeof(int), 1, file);
             fwrite(current->artist, sizeof(char), strlen(current->artist)+1, file);
+            //int len2 = strlen(current->title);
+            fwrite(&len2, sizeof(int), 1, file);
             fwrite(current->title, sizeof(char), strlen(current->title)+1, file);
             current = current->next;
         }

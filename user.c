@@ -12,7 +12,7 @@
 #define MAX_PWD_LEN 256
 
 //struct user library[MAX_USERS];
-int total_users = 0; // current amount of created accounts . 
+int total_users = 0; // current amount of created accounts . Issue: should i keep this a global variable?
 
 struct user {char username[MAX_USERNAME_LEN]; char password[MAX_PWD_LEN]; struct song_node ** library;};
 
@@ -173,7 +173,7 @@ void save_accounts(struct user ** account_lib) {
 }
 
 
-/* Returns total number of users saved in account file 
+/* Returns total number of users saved in account file
  * If no file, 0
 */
 int load_accounts(struct user ** account_lib) {
