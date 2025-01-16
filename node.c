@@ -46,10 +46,10 @@ void print_song_list(struct song_node * list){
   }
   printf("[ ");
   while (list->next != NULL) {
-    printf("{%s, %s} | ",list->artist, list->title);
+    printf("{%s, %s} | ", list->artist, list->title);
     list = list->next;
   }
-  printf("{%s, %s} ]\n",list->artist, list->title);
+  printf("{%s, %s} ]\n", list->artist, list->title);
 }
 
 void song_list_to_file(struct song_node * list, int fd){

@@ -140,3 +140,41 @@ void reset(struct song_node ** library) {
     library[i] = free_list(library[i]);
   }
 }
+
+
+
+void load_song_library(struct song_node ** library, FILE * file) {
+    char artist[100], title[100];
+
+    while (1) {
+        size_t artist_len = fread(artist, sizeof(char), 9, file);
+        if (artist_len == 0) {
+            break;  // end of songs
+        }
+
+        printf("%s\n", artist);
+
+        size_t title_len = fread(title, sizeof(char), 30, file);
+
+        printf("%ld, %ld\n", artist_len, title_len);
+        printf("%s, %s,\n", artist, title);
+        add(library, artist, title);  // Add the song to the library
+    }
+}
+
+///maybe try concating and add a line break between artist and title
+
+void save_song_library(struct song_node ** library, FILE * file) {
+    for (int i = 0; i < LIB_SIZE; i++) {
+        struct song_node * current = library[i];
+
+        while (current != NULL) {
+            printf("%s, %s,\n", current->artist, current->title);
+            printf("%lu\n", strlen(current->artist));
+            printf("%lu\n", strlen(current->title));
+            fwrite(current->artist, sizeof(char), strlen(current->artist)+1, file);
+            fwrite(current->title, sizeof(char), strlen(current->title)+1, file);
+            current = current->next;
+        }
+    }
+}

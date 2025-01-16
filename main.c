@@ -6,12 +6,14 @@
 #include "node.h"
 #include "library.h"
 #include "commands.h" // song related commands
+#include "user.h" // account related commands
 
 int main() {
 
   struct song_node ** library = init_song_lib();
   struct user ** account_lib = init_acct_lib();
-  //load_accounts(account_lib);
+  load_accounts(account_lib);
+  int curr_user_index = - 1; // current user logged in
 
   char input[256];
 
@@ -30,19 +32,25 @@ int main() {
     printf("4 - Create randomized playlist\n");
     printf("5 - Save library\n");
     printf("6 - Clear library\n");
+    printf("7 - Login\n");
+    printf("8 - Create account\n");
+    printf("9 - Save account\n"); // Issue: is there a way to make this only show once logged in?
+    printf("0 - Delete account\n"); // Issue: is there a way to make this only show once logged in?
     printf("q - Quit\n");
     printf("-------\n> ");
-    //printf("x - Delete account\n");
 
+    //should prob change to switch statements
     scanf("%s", input);
     if (strcmp(input, "1") == 0) {
       play_song();
-    }
+    } 
     else if (strcmp(input, "2") == 0) {
       add_song(library);
+      update_account(account_lib, curr_user_index, library);
     }
     else if (strcmp(input, "3") == 0) {
       remove_song(library);
+      update_account(account_lib, curr_user_index, library);
     }
     else if (strcmp(input, "4") == 0) {
       randomize_songs(library);
@@ -50,13 +58,14 @@ int main() {
     else if (strcmp(input, "5") == 0) {
       save_library(library);
     }
-    else if (strcmp(input, "6") == 0) { //added ability to clear library
+    else if (strcmp(input, "6") == 0) {
       printf("Clearing library...\n");
       reset(library);
       printf("Library cleared!\n\n");
+      update_account(account_lib, curr_user_index, library);
     }
     else if (strcmp(input, "7") == 0) {
-      login(account_lib);
+      curr_user_index = login(account_lib);
     }
     else if (strcmp(input, "8") == 0) {
       create_account(account_lib);
@@ -66,6 +75,10 @@ int main() {
     }
     else if (strcmp(input, "q") == 0) {
       return 0;
+    }
+    else {
+      printf("\nInvalid command.\n");
+      printf("Try: 1, 2, 3, 4, 5, or q\n\n");
     }
 
   }

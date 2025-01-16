@@ -301,7 +301,7 @@ void randomize_songs(struct song_node ** library) {
   printf("\n--- Your Randomized Playlist ---\n");
   shuffle(library);
 
-  char input[10];
+  char input[256];
   printf("Would you like to save this playlist? (yes/no)\n");
   printf("> ");
   scanf("%s", input);

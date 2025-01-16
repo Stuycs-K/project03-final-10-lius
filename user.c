@@ -3,15 +3,20 @@
 #include <string.h>
 #include "library.h"
 
+#include <unistd.h>
+#include <fcntl.h>
+
 #define SAVED_ACCOUNTS "accounts.dat"
 #define MAX_USERS 100
 #define MAX_USERNAME_LEN 100
 #define MAX_PWD_LEN 256
 
-static int total_users = 0; // current amount of created accounts
+//struct user library[MAX_USERS];
+int total_users = 0; // current amount of created accounts . 
 
 struct user {char username[MAX_USERNAME_LEN]; char password[MAX_PWD_LEN]; struct song_node ** library;};
 
+// intialize array of users. sets all indexes to NULL
 struct user ** init_acct_lib() {
   struct user ** user_arr = (struct user **)malloc(MAX_USERS*sizeof(struct user));
   for (int i = 0; i < MAX_USERS; i ++) {
@@ -19,6 +24,8 @@ struct user ** init_acct_lib() {
   }
   return user_arr;
 }
+
+void save_accounts(struct user ** account_lib);
 
 void create_account(struct user ** account_lib) {
   // get username
@@ -95,15 +102,18 @@ void create_account(struct user ** account_lib) {
 
   total_users++;
 
-  save_accounts(account_lib);
-  // FILE * file = fopen(SAVED_ACCOUNTS, "wb");
-  // fwrite(account_lib[0], sizeof(struct user), 1, file);
-  // fclose(file);
+  //save_accounts(account_lib);
+  FILE * file = fopen(SAVED_ACCOUNTS, "wb");
+  fwrite(account_lib[0], sizeof(struct user), 1, file);
+  fclose(file);
 
   printf("Account created!\n");
 }
 
-void login(struct user ** account_lib) {
+/* Returns the index of the user who logged in.
+ * Returns 0 if unsuccessful log in.
+*/
+int login(struct user ** account_lib) {
   getchar(); // clear newline character left by previous scanf
   char username[256];
   printf("Enter username: ");
@@ -114,48 +124,88 @@ void login(struct user ** account_lib) {
   printf("Enter password: ");
   scanf("%[^\n]", password);
 
+  //printf("STUFF: %d, %s, %s,\n", total_users, username, password);
+  //printf("%s", account_lib[0]->username);
   for (int i = 0; i < total_users; i++) {
+    //printf("STUFF: %s, %s,\n", account_lib[i]->username, account_lib[i]->password);
     if ((strcmp(username, account_lib[i]->username) == 0) && strcmp(password, account_lib[i]->password) == 0) {
-      printf("\nLogin successful!\n\n");
-      return;
+      printf("Login successful!\n");
+      return i;
     }
   }
 
-  printf("\nInvalid username or password.\n\n");
+  printf("Invalid username or password\n");
+  return 0;
 }
 
-//save to account
+/* save library to account */
+//curr_user_index is current user logged in
 void update_account(struct user ** account_lib, int curr_user_index, struct song_node ** library) {
+  printf("USR: %d\n", curr_user_index);
   if (curr_user_index == -1) {
     return;
   }
   else {
     printf("autosaving...\n");
     account_lib[curr_user_index]->library = library;
+    print_library(account_lib[curr_user_index]->library);
   }
 }
 
+/* backup accounts to file */
 void save_accounts(struct user ** account_lib) {
   FILE * file = fopen(SAVED_ACCOUNTS, "wb");
   if (file == NULL) {
-    printf("Error saving accounts to file\n");
-    return;
+      printf("Error saving accounts to file\n");
+      return;
   }
 
-  fwrite(account_lib, sizeof(struct user *), total_users, file);
+  for (int i = 0; i < total_users; i++) {
+    fwrite(account_lib[i], sizeof(struct user), 1, file);
+
+    save_song_library(account_lib[i]->library, file);
+
+    printf("Saved user %s and their song library\n", account_lib[i]->username);
+  }
+
   fclose(file);
+  printf("Accounts and libraries saved!\n");
 }
 
-void load_accounts(struct user ** account_lib) {
+
+/* Returns total number of users saved in account file 
+ * If no file, 0
+*/
+int load_accounts(struct user ** account_lib) {
   FILE * file = fopen(SAVED_ACCOUNTS, "rb");
   if (file == NULL) {
-    perror("Error opening accounts data file"); // no file or unable to open, no accounts to load
-    return;
+      perror("Error opening accounts data file");
+      return 0;
   }
 
-  while (fread(&account_lib[total_users], sizeof(struct user *), 1, file) == 1) {
-    total_users++;
+  struct user * temp_user;
+  while (1) {
+      temp_user = (struct user *)malloc(sizeof(struct user));
+      size_t read_size = fread(temp_user, sizeof(struct user), 1, file);
+
+      if (read_size == 0) {
+          free(temp_user);
+          break;
+      }
+
+      temp_user->library = init_song_lib();
+      load_song_library(temp_user->library, file);
+      print_library(temp_user->library);
+
+      account_lib[total_users] = temp_user;
+      total_users++;
+
+      printf("Loaded user %s and their song library\n", temp_user->username);
   }
 
   fclose(file);
+  return total_users;
+
 }
+
+void delete_account(struct user ** account_lib, int curr_user_index);
