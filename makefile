@@ -6,7 +6,7 @@ commands.o: commands.c node.h library.h
 	@gcc -c commands.c
 user.o: user.c 
 	@gcc -c user.c
-library.o: library.c node.h
+library.o: library.c node.h commands.h
 	@gcc -c library.c
 node.o: node.c
 	@gcc -c node.c
