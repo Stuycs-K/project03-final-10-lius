@@ -9,7 +9,7 @@
 
 static int total_users = 0; // current amount of created accounts
 
-/* Intialize array of users.
+/* Intializes array of users.
  * Sets all indexes to NULL.
 */
 struct user ** init_acct_lib() {
@@ -20,13 +20,15 @@ struct user ** init_acct_lib() {
   return user_arr;
 }
 
+/* Creates account using user inputted username and password.
+ * Once created, adds account to account_lib array and backups it up to file.
+*/
 void create_account(struct user ** account_lib) {
   // get username
   char username[MAX_USERNAME_LEN + 1];  // +1 for null terminator
   getchar();
   while (1) {
     printf("Enter username (%d char max): ", MAX_USERNAME_LEN);
-    //getchar();
     fflush(stdin); // clear input buffer
     fgets(username, sizeof(username), stdin);
     username[strcspn(username, "\n")] = '\0'; // remove newline character if present
@@ -92,22 +94,24 @@ void create_account(struct user ** account_lib) {
   account_lib[total_users] = new_user;
   total_users++;
 
+  // backup account to file
   save_accounts(account_lib);
 
   printf("Account created!\n");
 }
 
-/* Returns the index of the user who logged in.
+/* "Logs" user in if account w/ inputted username and password exists. 
+ * Returns the index of the user who logged in.
  * Returns -1 if unsuccessful log in.
 */
 int login(struct user ** account_lib) {
   getchar(); // clear newline character left by previous scanf
-  char username[256];
+  char username[MAX_USERNAME_LEN];
   printf("Enter username: ");
   scanf("%[^\n]", username);
 
   getchar();
-  char password[256];
+  char password[MAX_PWD_LEN];
   printf("Enter password: ");
   scanf("%[^\n]", password);
 
@@ -122,20 +126,19 @@ int login(struct user ** account_lib) {
   return -1;
 }
 
-/* Save song library locally to account.
+/* Saves song library locally to logged in account.
  * int curr_user_index: current user logged in
 */
 void update_account(struct user ** account_lib, int curr_user_index, struct song_node ** library) {
   if (curr_user_index == -1) {
-    return;
+    return; // not logged in
   }
   else {
-    //printf("autosaving...\n");
     account_lib[curr_user_index]->library = library;
   }
 }
 
-/* Backup account(s) to file */
+/* Backups account(s) to file */
 void save_accounts(struct user ** account_lib) {
   FILE * file = fopen(SAVED_ACCOUNTS, "wb");
   if (file == NULL) {
@@ -155,14 +158,14 @@ void save_accounts(struct user ** account_lib) {
     // separate structs
     fputc('\n', file);
 
-    printf("Saved account %s\n", account_lib[i]->username);
+    //printf("Saved account %s\n", account_lib[i]->username);
   }
 
   fclose(file);
 }
 
 
-/* Read account(s) from file
+/* Reads account(s) from file
  * Returns total number of users saved in account file
  * If no file, prints error and returns 0
 */
@@ -196,43 +199,57 @@ int load_accounts(struct user ** account_lib) {
 
   fclose(file);
   return total_users;
-
 }
 
+/* Deletes logged in account.
+ * Removes account from account_lib and backup file.
+ * Removes all songs in library.
+*/
 int delete_account(struct user ** account_lib, int curr_user_index, struct song_node ** library) {
-  if (curr_user_index == 0) {
-    account_lib = NULL;
-    account_lib = init_acct_lib();
-    save_accounts(account_lib);
-    reset(library);
+  if (total_users < 0) {
+    printf("\nNo accounts to delete.\n\n");
   }
-  else if (curr_user_index > 0) {
-    for (int i = curr_user_index; i < curr_user_index-1; i++) {
-      account_lib[i] = account_lib[i + 1];
+  else {
+    if (curr_user_index < 0) {
+      printf("\nYou must be logged in to delete an account.\n\n");
     }
-    save_accounts(account_lib);
-    reset(library);
+    else {
+      // remove account and shift elements to left to fill gap
+      for (int i = curr_user_index; i < total_users-1; i++) {
+        account_lib[i] = account_lib[i + 1];
+      }
+      total_users--;
+
+      save_accounts(account_lib);
+
+      reset(library);
+    }
   }
   return -1;
 }
 
+/* Deletes account backup file and exits user */
 void delete_accounts() {
   getchar();
   char password[256];
   printf("Enter admin password: ");
   scanf("%[^\n]", password);
   if (strcmp(password, "password") == 0) {
+
     printf("\n-Welcome-\n");
     printf("\nAre you sure you want to delete all accounts? (yes/no)\n");
     printf("> ");
+
     getchar();
     char input[10];
     scanf("%[^\n]", input);
     if (strcmp(input, "yes") == 0) {
-      printf("\nDeleting accounts\n");
+      printf("\nDeleting accounts...\n");
       remove(SAVED_ACCOUNTS);
-      printf("Deleted Accounts\n\n");
+      printf("Deleted accounts!\n");
+      printf("\nExiting...\n\n");
       exit(0);
     }
   }
+  printf("\nIncorrect password.\n\n");
 }

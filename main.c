@@ -36,6 +36,7 @@ int main() {
     printf("8 - Create account\n");
     printf("9 - Save account\n"); // Issue: is there a way to make this only show once logged in? maybe check for curr_index
     printf("0 - Delete account\n"); // Issue: is there a way to make this only show once logged in?
+    printf("00 - Delete all accounts\n"); // Issue: is there a way to make this only show once logged in?
     printf("q - Quit\n");
     printf("-------\n> ");
 
@@ -79,6 +80,9 @@ int main() {
     }
     else if (strcmp(input, "0") == 0) {
       curr_user_index = delete_account(account_lib, curr_user_index, library);
+    }
+    else if (strcmp(input, "00") == 0) {
+      delete_accounts();
     }
     else if (strcmp(input, "q") == 0) {
       return 0;
