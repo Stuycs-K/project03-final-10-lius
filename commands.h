@@ -1,6 +1,10 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+// void set_song_count(int new_song_count);
+void inc_song_count_by_1();
+int get_song_count();
+
 void play_song();
 void add_song(struct song_node ** library);
 void remove_song(struct song_node ** library);

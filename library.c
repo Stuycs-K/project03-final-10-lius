@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "node.h"
+#include "commands.h"
 
 #define LIB_SIZE 27 // library array has 27 indexes. index 0 is non alphabetical, index 1 thru 26 is A thru Z respectively. songs sorted by artists alphabetically in library
 
@@ -88,7 +89,7 @@ void shuffle(struct song_node ** library) {
   srand(time(NULL));
 
   // go thru array of linked lists to create array of all songs in library in artist alphabetical order
-  struct song_node * all_songs[1000];
+  struct song_node * all_songs[get_song_count()];
   int count = 0; //song count
   for (int i = 0; i < LIB_SIZE; i++) {
     struct song_node * current = library[i];
@@ -103,7 +104,7 @@ void shuffle(struct song_node ** library) {
     perror("Error opening file to save randomized playlist\n");
     return;
   }
-
+  
   // until no songs left: getting random song, writing it to file & printing it, remove song from array
   int i = 1;
   while (count > 0) {
@@ -142,53 +143,55 @@ void reset(struct song_node ** library) {
 }
 
 
-
+/* returns number of songs loaded in */
 void load_song_library(struct song_node ** library, FILE * file) {
-    char artist[100], title[100];
-    int len, len2;
+  char artist[100], title[100];
+  int artist_len, title_len;
 
-    while (1) {
-        fread(&len, sizeof(int), 1, file);
-        printf("%d\n", len);
-
-        size_t artist_len = fread(artist, sizeof(char), len, file);
-        if (artist_len == 0) {
-            break;
-        }
-
-        printf("%s\n", artist);
-
-        fread(&len2, sizeof(int), 1, file);
-        printf("%d\n", len2);
-
-        size_t title_len = fread(title, sizeof(char), len2, file);
-
-        printf("%ld, %ld\n", artist_len, title_len);
-        //printf("%d, %d\n", len, len2);
-        printf("%s, %s,\n", artist, title);
-        add(library, artist, title);
+  while (1) {
+    int ch = fgetc(file);
+    if (ch == '\n') {
+      break; // end of current struct
     }
+    ungetc(ch, file); // push char back into input stream
+
+
+    fread(&artist_len, sizeof(int), 1, file);
+    size_t byte_read = fread(artist, sizeof(char), artist_len+1, file);
+    if (byte_read == 0) {
+      break;  // end of songs
+    }
+
+    fread(&title_len, sizeof(int), 1, file);
+    fread(title, sizeof(char), title_len+1, file);
+
+    add(library, artist, title);
+    inc_song_count_by_1();
+  }
 }
 
-///maybe try concating and add a line break between artist and title
-
 void save_song_library(struct song_node ** library, FILE * file) {
-    for (int i = 0; i < LIB_SIZE; i++) {
-        struct song_node * current = library[i];
+  // iterate over each letter index (A-Z)
+  for (int i = 0; i < LIB_SIZE; i++) {
+  
+    struct song_node * current = library[i];
 
-        while (current != NULL) {
-            printf("%s, %s,\n", current->artist, current->title);
-            printf("%lu\n", strlen(current->artist));
-            printf("%lu\n", strlen(current->title));
-            int len = strlen(current->artist);
-            int len2 = strlen(current->title);
-            printf("%d, %d\n", len, len2);
-            fwrite(&len, sizeof(int), 1, file);
-            fwrite(current->artist, sizeof(char), strlen(current->artist)+1, file);
-            //int len2 = strlen(current->title);
-            fwrite(&len2, sizeof(int), 1, file);
-            fwrite(current->title, sizeof(char), strlen(current->title)+1, file);
-            current = current->next;
-        }
+    while (current != NULL) {
+      // remove newline character if present
+      current->title[strcspn(current->title, "\n")] = '\0';
+      current->artist[strcspn(current->artist, "\n")] = '\0';
+      
+      // write artist length, artist, title length, and title to file
+      int artist_len = strlen(current->artist);
+      int title_len = strlen(current->title);
+
+      fwrite(&artist_len, sizeof(int), 1, file);
+      fwrite(current->artist, sizeof(char), artist_len+1, file);
+
+      fwrite(&title_len, sizeof(int), 1, file);
+      fwrite(current->title, sizeof(char), title_len+1, file);
+
+      current = current->next;
     }
+  }
 }

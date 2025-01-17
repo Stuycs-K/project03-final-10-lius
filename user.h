@@ -1,6 +1,11 @@
 #ifndef USER_H
 #define USER_H
 
+#define MAX_USERNAME_LEN 100
+#define MAX_PWD_LEN 256
+
+struct user {char username[MAX_USERNAME_LEN]; char password[MAX_PWD_LEN]; struct song_node ** library;};
+
 struct user ** init_acct_lib();
 void create_account(struct user ** account_lib);
 int login(struct user ** account_lib);

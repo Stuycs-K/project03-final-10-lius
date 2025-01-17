@@ -12,6 +12,18 @@
 
 static int song_count = 0;
 
+// void set_song_count(int new_song_count) {
+//   song_count = new_song_count;
+// }
+
+void inc_song_count_by_1() {
+  song_count++;
+}
+
+int get_song_count() {
+  return song_count;
+}
+
 /* Combines given 2 strings. First given string paramater is the start of the new combined string.
  * Returns combined string.
  */
@@ -301,7 +313,7 @@ void randomize_songs(struct song_node ** library) {
   printf("\n--- Your Randomized Playlist ---\n");
   shuffle(library);
 
-  char input[256];
+  char input[10];
   printf("Would you like to save this playlist? (yes/no)\n");
   printf("> ");
   scanf("%s", input);
