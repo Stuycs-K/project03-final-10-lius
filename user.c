@@ -199,4 +199,33 @@ int load_accounts(struct user ** account_lib) {
 
 }
 
-void delete_account(struct user ** account_lib, int curr_user_index);
+int delete_account(struct user ** account_lib, int curr_user_index, struct song_node ** library) {
+  for (int i = curr_user_index; i < curr_user_index-1; i++) {
+    account_lib[i] = account_lib[i + 1];
+  }
+  save_accounts(account_lib);
+  reset(library);
+  
+  return -1;
+}
+
+void delete_accounts() {
+  getchar();
+  char password[256];
+  printf("Enter admin password: ");
+  scanf("%[^\n]", password);
+  if (strcmp(password, "password") == 0) {
+    printf("\n-Welcome-\n");
+    printf("\nAre you sure you want to delete all accounts? (yes/no)\n");
+    printf("> ");
+    getchar();
+    char input[10];
+    scanf("%[^\n]", input);
+    if (strcmp(input, "yes") == 0) {
+      printf("\nDeleting accounts\n");
+      remove(SAVED_ACCOUNTS);
+      printf("Deleted Accounts\n\n");
+      exit(0);
+    }
+  }
+}
