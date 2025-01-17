@@ -330,9 +330,9 @@ void randomize_songs(struct song_node ** library) {
 }
 
 /* Saves library to text file */
-void save_library(struct song_node ** library) {
+void download_library(struct song_node ** library) {
   printf("\n");
-  printf("Saving library...\n");
+  printf("Downloading library...\n");
   int fd = open("library_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
     perror("Error opening file to save library\n");
@@ -349,5 +349,5 @@ void save_library(struct song_node ** library) {
 
   close(fd);
 
-  printf("Library saved!\n\n");
+  printf("Library downloaded!\n\n");
 }

@@ -9,7 +9,7 @@ void play_song();
 void add_song(struct song_node ** library);
 void remove_song(struct song_node ** library);
 void randomize_songs(struct song_node ** library);
-void save_library(struct song_node ** library);
+void download_library(struct song_node ** library);
 
 char * concat(char * s1, char * s2);
 
