@@ -9,6 +9,7 @@
 #include "library.h"
 
 #define MP3_FILES_DIR_PATH "songs/"
+#define LIB_SAVE "library_save.txt"
 
 static int song_count = 0;
 
@@ -237,7 +238,7 @@ void play_song() {
 
 /* Adds song(s) to library */
 void add_song(struct song_node ** library) {
-  char input[256];
+  char input[10];
   printf("\nWould you like to manually add a song or automatically input one via MP3 file?\n");
   printf("-------\n");
   printf("1 - Manual\n");
@@ -248,13 +249,13 @@ void add_song(struct song_node ** library) {
 
   if (strcmp(input, "1") == 0) {
     getchar(); // clear newline character left by previous scanf
-    char * title = (char *)malloc(256);
+    char * title = (char *)malloc(MAX_TITLE_LEN);
     printf("Enter song title: ");
     int valid_input = scanf("%[^\n]", title);
     if (!valid_input) title = "";
 
     getchar();
-    char * artist = (char *)malloc(256);;
+    char * artist = (char *)malloc(MAX_ARTIST_LEN);;
     printf("Enter artist name: ");
     valid_input = scanf("%[^\n]", artist);
     if (!valid_input) artist = "";
@@ -268,7 +269,6 @@ void add_song(struct song_node ** library) {
     //auto
     // https://id3.org/
     // https://en.wikipedia.org/wiki/APE_tag
-    // get rid of trailing spaces?
     printf("\nAdding songs...\n");
     scan_directory_to_extract(MP3_FILES_DIR_PATH, library);
   }
@@ -288,13 +288,13 @@ void remove_song(struct song_node ** library) {
   }
   else {
     getchar(); // clear newline character left by previous scanf
-    char * title = (char *)malloc(256);
+    char * title = (char *)malloc(MAX_TITLE_LEN);
     printf("Enter song title: ");
     int valid_input = scanf("%[^\n]", title);
     if (!valid_input) title = "";
 
     getchar();
-    char * artist = (char *)malloc(256);;
+    char * artist = (char *)malloc(MAX_ARTIST_LEN);;
     printf("Enter artist name: ");
     valid_input = scanf("%[^\n]", artist);
     if (!valid_input) artist = "";
@@ -325,11 +325,11 @@ void randomize_songs(struct song_node ** library) {
   shuffle(library);
 
   char input[10];
-  printf("Would you like to save this playlist? (yes/no)\n");
+  printf("Would you like to download this playlist? (yes/no)\n");
   printf("> ");
   scanf("%s", input);
   if (strcmp(input, "yes") == 0) {
-    printf("\nSaved randomized playlist!\n");
+    printf("\nDownload randomized playlist!\n");
     return;
   }
   else {
@@ -344,7 +344,7 @@ void randomize_songs(struct song_node ** library) {
 void download_library(struct song_node ** library) {
   printf("\n");
   printf("Downloading library...\n");
-  int fd = open("library_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  int fd = open(LIB_SAVE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
     perror("Error opening file to save library\n");
     return;

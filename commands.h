@@ -1,6 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#define RAND_LST_SAVE "randomized_playlist_save.txt"
+
 // void set_song_count(int new_song_count);
 void inc_song_count_by_1();
 int get_song_count();
