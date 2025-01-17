@@ -200,12 +200,19 @@ int load_accounts(struct user ** account_lib) {
 }
 
 int delete_account(struct user ** account_lib, int curr_user_index, struct song_node ** library) {
-  for (int i = curr_user_index; i < curr_user_index-1; i++) {
-    account_lib[i] = account_lib[i + 1];
+  if (curr_user_index == 0) {
+    account_lib = NULL;
+    account_lib = init_acct_lib();
+    save_accounts(account_lib);
+    reset(library);
   }
-  save_accounts(account_lib);
-  reset(library);
-  
+  else if (curr_user_index > 0) {
+    for (int i = curr_user_index; i < curr_user_index-1; i++) {
+      account_lib[i] = account_lib[i + 1];
+    }
+    save_accounts(account_lib);
+    reset(library);
+  }
   return -1;
 }
 

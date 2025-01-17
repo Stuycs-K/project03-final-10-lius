@@ -13,7 +13,7 @@ int main() {
   struct song_node ** library = init_song_lib();
   struct user ** account_lib = init_acct_lib();
   load_accounts(account_lib);
-  int curr_user_index = - 1; // current user logged in
+  int curr_user_index = -1; // current user logged in
 
   char input[256];
 
@@ -34,7 +34,7 @@ int main() {
     printf("6 - Clear library\n");
     printf("7 - Login\n");
     printf("8 - Create account\n");
-    printf("9 - Save account\n"); // Issue: is there a way to make this only show once logged in?
+    printf("9 - Save account\n"); // Issue: is there a way to make this only show once logged in? maybe check for curr_index
     printf("0 - Delete account\n"); // Issue: is there a way to make this only show once logged in?
     printf("q - Quit\n");
     printf("-------\n> ");
@@ -43,7 +43,7 @@ int main() {
     scanf("%s", input);
     if (strcmp(input, "1") == 0) {
       play_song();
-    } 
+    }
     else if (strcmp(input, "2") == 0) {
       add_song(library);
       update_account(account_lib, curr_user_index, library);
@@ -56,7 +56,7 @@ int main() {
       randomize_songs(library);
     }
     else if (strcmp(input, "5") == 0) {
-      save_library(library);
+      download_library(library);
     }
     else if (strcmp(input, "6") == 0) {
       printf("Clearing library...\n");
@@ -66,12 +66,19 @@ int main() {
     }
     else if (strcmp(input, "7") == 0) {
       curr_user_index = login(account_lib);
+      if (curr_user_index >= 0) {
+        library = account_lib[curr_user_index]->library;
+      }
     }
     else if (strcmp(input, "8") == 0) {
       create_account(account_lib);
     }
     else if (strcmp(input, "9") == 0) {
       save_accounts(account_lib);
+      printf("\nAccounts saved!\n\n");
+    }
+    else if (strcmp(input, "0") == 0) {
+      curr_user_index = delete_account(account_lib, curr_user_index, library);
     }
     else if (strcmp(input, "q") == 0) {
       return 0;
