@@ -34,6 +34,14 @@ char * concat(char * s1, char * s2) {
   return cat_str;
 }
 
+/* Remove leading and trailing spaces from given string */
+void remove_whitespace(char * str) {
+  while (*str == ' ') str++;
+  char * end = str + strlen(str) - 1;
+  while (end > str && *end == ' ') end--;
+  *(end + 1) = '\0';
+}
+
 /* Determines if file is an MP3 file or not.
  * Returns true if file is an MP3 file.
  */
@@ -61,6 +69,9 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 
     title[30] = '\0';
     artist[30] = '\0';
+
+    remove_whitespace(title);
+    remove_whitespace(artist);
 
     // printf("00%s00, ", artist);
     // printf("00%s00\n", title);
