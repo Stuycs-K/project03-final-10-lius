@@ -23,11 +23,17 @@ struct user ** init_acct_lib() {
 void create_account(struct user ** account_lib) {
   // get username
   char username[MAX_USERNAME_LEN + 1];  // +1 for null terminator
+  getchar();
   while (1) {
     printf("Enter username (%d char max): ", MAX_USERNAME_LEN);
+    //getchar();
     fflush(stdin); // clear input buffer
     fgets(username, sizeof(username), stdin);
     username[strcspn(username, "\n")] = '\0'; // remove newline character if present
+
+    if (strcmp(username, "q") == 0) {
+      return;
+    }
 
     if (strlen(username) >= MAX_USERNAME_LEN) {
       printf("Username too long.\n");
@@ -57,6 +63,10 @@ void create_account(struct user ** account_lib) {
     fflush(stdin); // clear input buffer
     fgets(password, sizeof(password), stdin);
     password[strcspn(password, "\n")] = '\0'; // remove newline character if present
+
+    if (strcmp(password, "q") == 0) {
+      return;
+    }
 
     if (strlen(password) >= MAX_USERNAME_LEN) {
       printf("Password too long.\n");
