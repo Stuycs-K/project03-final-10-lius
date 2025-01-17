@@ -33,7 +33,7 @@ Added init, save_account and load_account and create_account functions, added ca
 Added login and update_account functions. Tested account functions. Restarted on save_account and load_account functions b/c they were not working. Added load_song_library and save_song_library functions in library.c to be called in the rewrite. save_account and load_account functions still don't work. (3.5 hr)
 
 ### 2025-01-16 - account functions cont.
-Fixed save account and load account functionalities -- added inc_song_count_by_1() and int get_song_count() in commands.c. Added delete_account and delete_accounts functions. Added functionality to create_account where user can enter q to quit. Created MAX_ARTIST_LEN and MAX_TITLE_LEN macros
+Fixed save account and load account functionalities -- added inc_song_count_by_1() and int get_song_count() in commands.c. Added delete_account and delete_accounts functions. Added functionality to create_account where user can enter q to quit. Created MAX_ARTIST_LEN and MAX_TITLE_LEN macros (2.3 hr)
 
 ### 2025-01-17 - Brief description
 Expanded description including how much time was spent on task.
