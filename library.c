@@ -145,7 +145,7 @@ void reset(struct song_node ** library) {
 
 /* returns number of songs loaded in */
 void load_song_library(struct song_node ** library, FILE * file) {
-  char artist[100], title[100];
+  char artist[MAX_ARTIST_LEN], title[MAX_TITLE_LEN];
   int artist_len, title_len;
 
   while (1) {

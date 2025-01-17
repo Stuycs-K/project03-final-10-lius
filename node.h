@@ -1,7 +1,10 @@
 #ifndef NODE_H
 #define NODE_H
 
-struct song_node {char artist[100]; char title[100]; struct song_node * next;};
+#define MAX_ARTIST_LEN 100
+#define MAX_TITLE_LEN 100
+
+struct song_node {char artist[MAX_ARTIST_LEN]; char title[MAX_TITLE_LEN]; struct song_node * next;};
 
 struct song_node * insert_front(struct song_node * list, char * artist, char * title);
 struct song_node * insert_song(struct song_node * list, char * artist, char * title);
