@@ -33,7 +33,10 @@ void play_song() {
   }
 
   if (!scan_directory_for_file(MP3_FILES_DIR_PATH, song)) {
-    printf("\nAn MP3 file for that song does not exist.\n\n");
+    printf("\nAn MP3 file for that song does not exist.\n");
+    printf("\nAvailable songs:\n");
+    scan_directory_to_print(MP3_FILES_DIR_PATH);
+    printf("\n");
     return;
   }
 
@@ -315,7 +318,7 @@ void scan_directory_to_extract(char * path, struct song_node ** library) {
   }
 
   if (!has_mp3) {
-    printf("No mp3 files found.\n");
+    printf("No MP3 files found.\n");
   }
 }
 
@@ -338,6 +341,24 @@ int scan_directory_for_file(char * dir_path, char * file) {
     }
   }
   return 0;
+}
+
+/* Scans for MP3 files in given directory.
+ * If finds MP3 file prints it
+*/
+void scan_directory_to_print(char * path) {
+  DIR * d = opendir(path);
+  if (path == NULL) {
+    perror("Error opening directory\n");
+    return;
+  }
+
+  struct dirent * entry;
+  while ((entry = readdir(d)) != NULL) {
+    if (entry->d_type == DT_REG && is_mp3(entry->d_name)) {
+      printf("- %s\n", entry->d_name);
+    }
+  }
 }
 
 /* Combines given 2 strings. First given string paramater is the start of the new combined string.
