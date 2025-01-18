@@ -2,21 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <signal.h>
 #include "node.h"
 #include "library.h"
 #include "commands.h" // song related commands
 #include "user.h" // account related commands
 
-int main() {
+struct user ** account_lib;
 
+static void sighandler(int signo) {
+  if (signo == SIGINT) {
+    save_accounts(account_lib);
+    printf("\n_____________________");
+    exit(0);
+  }
+}
+
+int main() {
   struct song_node ** library = init_song_lib();
-  struct user ** account_lib = init_acct_lib();
+  account_lib = init_acct_lib();
   load_accounts(account_lib);
   int curr_user_index = -1; // current user logged in
 
   char input[10];
 
   while (1) {
+    signal(SIGINT, sighandler);
+    
     printf("=====================\n");
     printf("Your current library:\n");
     print_library(library);
@@ -82,13 +94,16 @@ int main() {
           create_account(account_lib);
           break;
         case '9':
+	        printf("\nSaving accounts...\n");
           save_accounts(account_lib);
-          printf("\nAccounts saved!\n\n");
+          printf("Accounts saved!\n\n");
           break;
         case '0':
           curr_user_index = delete_account(account_lib, curr_user_index, library);
           break;
         case 'q':
+          save_accounts(account_lib);
+          printf("_____________________\n");
           return 0;
         default:
           printf("\nInvalid command.\n");
