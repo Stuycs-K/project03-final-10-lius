@@ -10,7 +10,7 @@
 #include "commands.h"
 
 #define MP3_FILES_DIR_PATH "songs/"
-#define LIB_SAVE "library_save.txt"
+#define LIB_SAVE "downloads/library_save.txt"
 
 static int song_count = 0;
 

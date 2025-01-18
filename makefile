@@ -15,4 +15,6 @@ run: runme
 clean:
 	@rm *.o
 	@rm runme
-	@rm library_save.txt randomized_playlist_save.txt accounts.dat
+	@rm accounts.dat
+	@rm -f downloads/library_save.txt
+	@rm -f downloads/randomized_playlist_save.txt
