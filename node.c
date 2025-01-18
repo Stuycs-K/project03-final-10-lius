@@ -80,7 +80,7 @@ struct song_node * find_song(struct song_node * list, char * artist, char * titl
   return NULL;
 }
 
-/* Find song associated with given artist .
+/* Find song associated with given artist.
  * If found, returns pointer to first song w/ the artist.
  * If no songs found, returns NULL.
 */

@@ -245,6 +245,7 @@ void delete_accounts() {
   }
 }
 
+/* Displays all accounts (and their data) stored in account_lib */
 void display_accounts(struct user ** account_lib) {
   printf("\n==============\n");
   printf("-- Accounts --\n");
@@ -256,6 +257,7 @@ void display_accounts(struct user ** account_lib) {
   printf("==============\n");
 }
 
+/* Initial interface for display and delete accounts */
 void admin(struct user ** account_lib) {
   getchar(); // clear newline character left by previous scanf
   char password[MAX_PWD_LEN];
