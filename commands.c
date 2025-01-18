@@ -71,7 +71,7 @@ void play_song() {
 
 /* Adds song(s) to library */
 void add_song(struct song_node ** library) {
-  char input[10];
+  char input[1];
   printf("\nWould you like to manually add a song or automatically input one via MP3 file?\n");
   printf("-------\n");
   printf("1 - Manual\n");
@@ -80,31 +80,33 @@ void add_song(struct song_node ** library) {
 
   scanf("%s", input);
 
-  if (strcmp(input, "1") == 0) {
-    // manual
-    getchar(); // clear newline character left by previous scanf
-    char * title = (char *)malloc(MAX_TITLE_LEN);
-    printf("Enter song title: ");
-    int valid_input = scanf("%[^\n]", title);
-    if (!valid_input) title = "";
+  switch (input[0]) {
+    case '1':
+      // manual
+      getchar(); // clear newline character left by previous scanf
+      char * title = (char *)malloc(MAX_TITLE_LEN);
+      printf("Enter song title: ");
+      int valid_input = scanf("%[^\n]", title);
+      if (!valid_input) title = "";
 
-    getchar();
-    char * artist = (char *)malloc(MAX_ARTIST_LEN);;
-    printf("Enter artist name: ");
-    valid_input = scanf("%[^\n]", artist);
-    if (!valid_input) artist = "";
+      getchar();
+      char * artist = (char *)malloc(MAX_ARTIST_LEN);;
+      printf("Enter artist name: ");
+      valid_input = scanf("%[^\n]", artist);
+      if (!valid_input) artist = "";
 
-    add(library, artist, title);
+      add(library, artist, title);
 
-    song_count++;
-  }
-  else if (strcmp(input, "2") == 0) {
-    // auto
-    printf("\nAdding songs...\n");
-    scan_directory_to_extract(MP3_FILES_DIR_PATH, library);
-  }
-  else {
-    printf("\nInvalid command.\n");
+      song_count++;
+      break;
+    case '2':
+      // auto
+      printf("\nAdding songs...\n");
+      scan_directory_to_extract(MP3_FILES_DIR_PATH, library);
+      break;
+    default:
+      printf("\nInvalid command.\n");
+      break;
   }
 
   printf("\n");
@@ -157,9 +159,10 @@ void randomize_songs(struct song_node ** library) {
     char input[10];
     printf("Would you like to download this playlist? (yes/no)\n");
     printf("> ");
-    scanf("%s", input);
+    getchar(); // clear newline character left by previous scanf
+    scanf("%[^\n]", input);
     if (strcmp(input, "yes") == 0) {
-      printf("\nDownload randomized playlist!\n");
+      printf("\nDownloaded randomized playlist!\n");
       return;
     }
     else {
@@ -182,7 +185,6 @@ void download_library(struct song_node ** library) {
     return;
   }
 
-  //printf([username's] playlist);
   for (int i = 0; i < LIB_SIZE; i++) {
     if (library[i] != NULL) {
       dprintf(fd, "%c: ", i + 96);
@@ -191,7 +193,7 @@ void download_library(struct song_node ** library) {
   }
   close(fd);
 
-  printf("Library downloaded!\n\n");
+  printf("\nLibrary downloaded!\n\n");
 }
 
 /* Determines if file is an MP3 file or not.
