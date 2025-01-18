@@ -4,20 +4,20 @@
 #include <time.h>
 #include "node.h"
 
-struct song_node * insert_front(struct song_node * list, char * artist, char * title){
-  struct song_node * newSong = (struct song_node *)malloc(sizeof(struct song_node));
-  strcpy(newSong->title, title);
-  strcpy(newSong->artist, artist);
-  newSong->next = list;
-  return newSong;
-}
-
 int compare(struct song_node * a, struct song_node * b){
   int c = strcasecmp(a->artist, b->artist);
   if (c == 0) {
     return strcasecmp(a->title, b->title);
   }
   return c;
+}
+
+struct song_node * insert_front(struct song_node * list, char * artist, char * title){
+  struct song_node * newSong = (struct song_node *)malloc(sizeof(struct song_node));
+  strcpy(newSong->title, title);
+  strcpy(newSong->artist, artist);
+  newSong->next = list;
+  return newSong;
 }
 
 struct song_node * insert_song(struct song_node * list, char * artist, char * title){
@@ -85,23 +85,23 @@ struct song_node * find_song_artist(struct song_node * list, char * artist) {
   return NULL;
 }
 
-struct song_node * random_song(struct song_node * list) {
-  if (list == NULL) return NULL;
+// struct song_node * random_song(struct song_node * list) {
+//   if (list == NULL) return NULL;
 
-  int count = 0;
-  struct song_node * current = list;
-  while (current != NULL) {
-    count++;
-    current = current->next;
-  }
-  srand(time(NULL));
-  int index = rand() % count;
-  while (index) {
-    index--;
-    list = list->next;
-  }
-  return list;
-}
+//   int count = 0;
+//   struct song_node * current = list;
+//   while (current != NULL) {
+//     count++;
+//     current = current->next;
+//   }
+//   srand(time(NULL));
+//   int index = rand() % count;
+//   while (index) {
+//     index--;
+//     list = list->next;
+//   }
+//   return list;
+// }
 
 int delete(struct song_node ** list, char * artist, char * title) {
   struct song_node * prev_node = NULL;

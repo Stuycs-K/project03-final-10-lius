@@ -2,14 +2,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 #include <ctype.h>
 #include "node.h"
 #include "commands.h"
+#include "library.h"
 
-#define LIB_SIZE 27 // library array has 27 indexes. index 0 is non alphabetical, index 1 thru 26 is A thru Z respectively. songs sorted by artists alphabetically in library
-
+/* Intializes array of song_nodes.
+ * Sets all indexes to NULL.
+*/
 struct song_node ** init_song_lib() {
   struct song_node ** songArr = (struct song_node **)malloc(LIB_SIZE*sizeof(struct song_node));
   for (int i = 0; i < LIB_SIZE; i++) {
@@ -18,6 +20,7 @@ struct song_node ** init_song_lib() {
   return songArr;
 }
 
+/* Returns corresponding letter index of the library array for given character */
 int first_letter(char c) {
   if (!isalpha(c)) {
     return 0;
@@ -25,16 +28,32 @@ int first_letter(char c) {
   return toupper(c) - 64;
 }
 
+/* Adds song associated with given artist and title to library */
 void add(struct song_node ** library, char * artist, char * title) {
-  library[first_letter(artist[0])] = insert_song(library[first_letter(artist[0])],artist,title);
+  library[first_letter(artist[0])] = insert_song(library[first_letter(artist[0])], artist, title);
 }
 
+/* Removes song associated with given artist and title from library.
+ * Returns true if song exists and was deleted. False otherwise.
+*/
+int delete_song(struct song_node ** library, char * artist, char * title ) {
+  int song_found_staus = delete(&library[first_letter(artist[0])], artist, title);
+  return song_found_staus;
+}
+
+/* Searches for song associated with given artist and title in library
+ * Returns index of song.
+ * Returns NULL if song not found.
+*/
 struct song_node * search_song(struct song_node ** library, char * artist, char * title ) {
-  return find_song(library[first_letter(artist[0])],artist,title);
+  return find_song(library[first_letter(artist[0])], artist, title);
 }
 
+/* Searches for given artist in library
+ *
+*/
 struct song_node * search_artist(struct song_node ** library, char * artist ) {
-  return find_song_artist(library[first_letter(artist[0])],artist);
+  return find_song_artist(library[first_letter(artist[0])], artist);
 }
 
 void print_letter(struct song_node ** library, char letter) {
@@ -85,6 +104,9 @@ void real_shuffle(struct song_node ** library, int n) {
   printf("\n");
 }
 
+/* Randomizes songs in library.
+ * Prints and writes randomized song to file
+*/
 void shuffle(struct song_node ** library) {
   srand(time(NULL));
 
@@ -99,12 +121,12 @@ void shuffle(struct song_node ** library) {
     }
   }
 
-  int fd = open("randomized_playlist_save.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  int fd = open(RAND_LST_SAVE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
     perror("Error opening file to save randomized playlist\n");
     return;
   }
-  
+
   // until no songs left: getting random song, writing it to file & printing it, remove song from array
   int i = 1;
   while (count > 0) {
@@ -122,15 +144,10 @@ void shuffle(struct song_node ** library) {
 
     count--;
     i++;
-
   }
+
   close(fd);
   printf("\n");
-}
-
-int delete_song(struct song_node ** library, char * artist, char * title ) {
-  int song_found_staus = delete(&library[first_letter(artist[0])], artist, title);
-  return song_found_staus;
 }
 
 void reset(struct song_node ** library) {
@@ -142,8 +159,7 @@ void reset(struct song_node ** library) {
   }
 }
 
-
-/* returns number of songs loaded in */
+/* Reads library data into library from file until encounters next user struct */
 void load_song_library(struct song_node ** library, FILE * file) {
   char artist[MAX_ARTIST_LEN], title[MAX_TITLE_LEN];
   int artist_len, title_len;
@@ -154,7 +170,6 @@ void load_song_library(struct song_node ** library, FILE * file) {
       break; // end of current struct
     }
     ungetc(ch, file); // push char back into input stream
-
 
     fread(&artist_len, sizeof(int), 1, file);
     size_t byte_read = fread(artist, sizeof(char), artist_len+1, file);
@@ -170,17 +185,18 @@ void load_song_library(struct song_node ** library, FILE * file) {
   }
 }
 
+/* Writes songs in library into file */
 void save_song_library(struct song_node ** library, FILE * file) {
   // iterate over each letter index (A-Z)
   for (int i = 0; i < LIB_SIZE; i++) {
-  
+
     struct song_node * current = library[i];
 
     while (current != NULL) {
       // remove newline character if present
       current->title[strcspn(current->title, "\n")] = '\0';
       current->artist[strcspn(current->artist, "\n")] = '\0';
-      
+
       // write artist length, artist, title length, and title to file
       int artist_len = strlen(current->artist);
       int title_len = strlen(current->title);
