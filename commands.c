@@ -162,12 +162,12 @@ void randomize_songs(struct song_node ** library) {
     getchar(); // clear newline character left by previous scanf
     scanf("%[^\n]", input);
     if (strcmp(input, "yes") == 0) {
-      printf("\nDownloaded randomized playlist!\n");
+      printf("\nDownloaded randomized playlist!\n\n");
       return;
     }
     else {
       if (remove(RAND_LST_SAVE) != 0) {
-        perror("Error deleting file for randomized playlist\n");
+        perror("Error deleting file for randomized playlist\n\n");
       }
       printf("\n");
     }
@@ -209,42 +209,41 @@ void search(struct song_node ** library) {
 
   scanf("%s", input);
 
-  switch (input[0]) {
-    case '1':
-      // find artist
-      getchar(); // clear newline character left by previous scanf
-      char * artist = (char *)malloc(MAX_ARTIST_LEN);
-      printf("Enter artist: ");
-      int valid_input = scanf("%[^\n]", artist);
-      if (!valid_input) artist = "";
+  if (strcmp(input, "1") == 0) {
+    //find artist
+    getchar(); // clear newline character left by previous scanf
+    char * artist = (char *)malloc(MAX_ARTIST_LEN);
+    printf("Enter artist: ");
+    int valid_input = scanf("%[^\n]", artist);
+    if (!valid_input) artist = "";
 
-      print_artist(library, artist);
-      break;
-    case '2':
-      // find song
-      getchar();
-      char * title = (char *)malloc(MAX_TITLE_LEN);
-      printf("Enter song title: ");
-      valid_input = scanf("%[^\n]", title);
-      if (!valid_input) title = "";
+    print_artist(library, artist);
+  }
+  else if (strcmp(input, "2") == 0) {
+    // find song
+    getchar();
+    char * title = (char *)malloc(MAX_TITLE_LEN);
+    printf("Enter song title: ");
+    int valid_input = scanf("%[^\n]", title);
+    if (!valid_input) title = "";
 
-      getchar();
-      printf("Enter artist name: ");
-      valid_input = scanf("%[^\n]", artist);
-      if (!valid_input) artist = "";
+    getchar();
+    char * artist = (char *)malloc(MAX_ARTIST_LEN);
+    printf("Enter artist name: ");
+    valid_input = scanf("%[^\n]", artist);
+    if (!valid_input) artist = "";
 
-      if (search_song(library, artist, title) == NULL) {
-        printf("\nSong not found.\n");
-      }
-      else {
-        printf("\nSong found!\n");
-        printf("%c: ", artist[0]);
-        print_song_list(library[first_letter(artist[0])]);
-      }
-      break;
-    default:
-      printf("\nInvalid command.\n");
-      break;
+    if (search_song(library, artist, title) == NULL) {
+      printf("\nSong not found.\n");
+    }
+    else {
+      printf("\nSong found!\n");
+      printf("%c: ", artist[0]);
+      print_song_list(library[first_letter(artist[0])]);
+    }
+  }
+  else {
+    printf("\nInvalid command.\n");
   }
 
   printf("\n");
