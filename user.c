@@ -24,9 +24,10 @@ struct user ** init_acct_lib() {
  * Once created, adds account to account_lib array and backups it up to file.
 */
 void create_account(struct user ** account_lib) {
+  printf("enter 'q' to quit\n");
   // get username
   char username[MAX_USERNAME_LEN + 1];  // +1 for null terminator
-  getchar();
+  getchar(); // clear newline character left by previous scanf
   while (1) {
     printf("Enter username (%d char max): ", MAX_USERNAME_LEN);
     fflush(stdin); // clear input buffer
@@ -100,7 +101,7 @@ void create_account(struct user ** account_lib) {
   printf("Account created!\n");
 }
 
-/* "Logs" user in if account w/ inputted username and password exists. 
+/* "Logs" user in if account w/ inputted username and password exists.
  * Returns the index of the user who logged in.
  * Returns -1 if unsuccessful log in.
 */
@@ -164,10 +165,9 @@ void save_accounts(struct user ** account_lib) {
   fclose(file);
 }
 
-
-/* Reads account(s) from file
- * Returns total number of users saved in account file
- * If no file, prints error and returns 0
+/* Reads account(s) from file.
+ * Returns total number of users saved in account file.
+ * If no file, prints error and returns 0.
 */
 int load_accounts(struct user ** account_lib) {
   FILE * file = fopen(SAVED_ACCOUNTS, "rb");
@@ -230,26 +230,66 @@ int delete_account(struct user ** account_lib, int curr_user_index, struct song_
 
 /* Deletes account backup file and exits user */
 void delete_accounts() {
-  getchar();
-  char password[256];
+  printf("\nAre you sure you want to delete all accounts? (yes/no)\n");
+  printf("> ");
+
+  getchar(); // clear newline character left by previous scanf
+  char input[10];
+  scanf("%[^\n]", input);
+  if (strcmp(input, "yes") == 0) {
+    printf("\nDeleting accounts...\n");
+    remove(SAVED_ACCOUNTS);
+    printf("Deleted accounts!\n");
+    printf("\nExiting...\n\n");
+    exit(0);
+  }
+}
+
+void display_accounts(struct user ** account_lib) {
+  printf("\n==============\n");
+  printf("-- Accounts --\n");
+  for (int i = 0; i < total_users; i++) {
+    printf("Username: %s, Password: %s\n", account_lib[i]->username, account_lib[i]->password);
+    printf("Library:\n");
+    print_library(account_lib[i]->library);
+  }
+  printf("==============\n");
+}
+
+void admin(struct user ** account_lib) {
+  getchar(); // clear newline character left by previous scanf
+  char password[MAX_PWD_LEN];
   printf("Enter admin password: ");
   scanf("%[^\n]", password);
-  if (strcmp(password, "password") == 0) {
+  if (strcmp(password, "password") != 0) {
+    printf("\nIncorrect password.\n\n");
+  }
+  else {
+    while (1) {
+      printf("=====================\n");
+      printf("\n-- Welcome --\n");
+      char input[1];
+      printf("-------\n");
+      printf("1 - Display accounts\n");
+      printf("2 - Delete accounts\n");
+      printf("q - Quit\n");
+      printf("-------\n> ");
 
-    printf("\n-Welcome-\n");
-    printf("\nAre you sure you want to delete all accounts? (yes/no)\n");
-    printf("> ");
+      scanf("%s", input);
 
-    getchar();
-    char input[10];
-    scanf("%[^\n]", input);
-    if (strcmp(input, "yes") == 0) {
-      printf("\nDeleting accounts...\n");
-      remove(SAVED_ACCOUNTS);
-      printf("Deleted accounts!\n");
-      printf("\nExiting...\n\n");
-      exit(0);
+      switch (input[0]) {
+        case '1':
+          display_accounts(account_lib);
+          break;
+        case '2':
+          delete_accounts();
+          break;
+        case 'q':
+          return;
+        default:
+          printf("\nInvalid command.\n");
+          break;
+      }
     }
   }
-  printf("\nIncorrect password.\n\n");
 }

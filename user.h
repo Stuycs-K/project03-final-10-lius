@@ -16,6 +16,9 @@ void save_accounts(struct user ** account_lib);
 int load_accounts(struct user ** account_lib);
 
 int delete_account(struct user ** account_lib, int curr_user_index, struct song_node ** library);
+
 void delete_accounts();
+void display_accounts(struct user ** account_lib);
+void admin(struct user ** account_lib);
 
 #endif
