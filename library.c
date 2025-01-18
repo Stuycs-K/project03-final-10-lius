@@ -28,13 +28,13 @@ int first_letter(char c) {
   return toupper(c) - 64;
 }
 
-/* Adds song associated with given artist and title to library */
+/* Adds to library a song using given artist and title */
 void add(struct song_node ** library, char * artist, char * title) {
   library[first_letter(artist[0])] = insert_song(library[first_letter(artist[0])], artist, title);
 }
 
 /* Removes song associated with given artist and title from library.
- * Returns true if song exists and was deleted. False otherwise.
+ * Returns 1 if song exists and was deleted. Returns 0 otherwise.
 */
 int delete_song(struct song_node ** library, char * artist, char * title ) {
   int song_found_staus = delete(&library[first_letter(artist[0])], artist, title);
@@ -50,32 +50,33 @@ struct song_node * search_song(struct song_node ** library, char * artist, char 
 }
 
 /* Searches for given artist in library
- *
+ * If found, returns pointer to first song w/ the artist.
+ * If no songs found, returns NULL.
 */
 struct song_node * search_artist(struct song_node ** library, char * artist ) {
   return find_song_artist(library[first_letter(artist[0])], artist);
 }
 
-void print_letter(struct song_node ** library, char letter) {
-  print_song_list(library[first_letter(letter)]);
-}
-
+/* Prints songs of given artist */
 void print_artist(struct song_node ** library, char * artist) {
-  printf("Printing [%s] \n", artist);
-  printf("%s: ", artist);
   struct song_node * current = search_artist(library, artist);
   if (current == NULL) {
-    printf("\n\n");
+    printf("\nNo songs found for %s.\n", artist);
     return;
   }
-  printf("[ ");
-  while (current->next != NULL && strcasecmp(current->next->artist, artist) == 0) {
-    printf("{%s, %s} | ", current->artist, current->title);
-    current = current->next;
+  else {
+    printf("\nArtist found!\n");
+    printf("%s: ", artist);
+    printf("[ ");
+    while (current->next != NULL && strcasecmp(current->next->artist, artist) == 0) {
+        printf("{%s, %s} | ", current->artist, current->title);
+        current = current->next;
+    }
+    printf("{%s, %s} ]\n", current->artist, current->title);
   }
-  printf("{%s, %s} ]\n\n", current->artist, current->title);
 }
 
+/* Prints full library */
 void print_library(struct song_node ** library) {
   for (int i = 0; i < LIB_SIZE; i++) {
     if (library[i] != NULL) {
@@ -86,23 +87,24 @@ void print_library(struct song_node ** library) {
   printf("\n");
 }
 
-void real_shuffle(struct song_node ** library, int n) {
-  struct song_node * all_songs[1000];
-  int count = 0;
-  for (int i = 0; i < LIB_SIZE; i++) {
-    struct song_node * current = library[i];
-    while (current != NULL) {
-      all_songs[count++] = current;
-      current = current->next;
-    }
-  }
-  if (count == 0) return; //library empty
-  for (int i = 0; i < n; i++) {
-    int random_index = rand() % count;
-    printf("{%s, %s}\n", all_songs[random_index]->artist, all_songs[random_index]->title);
-  }
-  printf("\n");
-}
+/* Prints out a series of n randomly chosen songs. (can have duplicates) */
+// void real_shuffle(struct song_node ** library, int n) {
+//   struct song_node * all_songs[1000];
+//   int count = 0;
+//   for (int i = 0; i < LIB_SIZE; i++) {
+//     struct song_node * current = library[i];
+//     while (current != NULL) {
+//       all_songs[count++] = current;
+//       current = current->next;
+//     }
+//   }
+//   if (count == 0) return; //library empty
+//   for (int i = 0; i < n; i++) {
+//     int random_index = rand() % count;
+//     printf("{%s, %s}\n", all_songs[random_index]->artist, all_songs[random_index]->title);
+//   }
+//   printf("\n");
+// }
 
 /* Randomizes songs in library.
  * Prints and writes randomized song to file
@@ -150,6 +152,7 @@ void shuffle(struct song_node ** library) {
   printf("\n");
 }
 
+/* Clears out all the linked lists in the library */
 void reset(struct song_node ** library) {
   for (int i = 0; i < LIB_SIZE; i++) {
     if(library[i] != NULL){
