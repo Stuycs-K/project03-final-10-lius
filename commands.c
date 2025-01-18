@@ -205,6 +205,7 @@ int is_mp3(char * filename) {
 /* Extracts ID3v1 tag from the end of MP3 file.
  * Gets MP3 file from given file path.
  * Uses extracted data (artist and title) to add song to library.
+ * If song already added to library, exit.
 */
 void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
   FILE * file = fopen(file_path, "rb");
@@ -227,7 +228,10 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 
     // printf("00%s00, ", artist);
     // printf("00%s00\n", title);
-
+    
+    if (search_song(library, artist, title) != NULL){
+      return;
+    }
     add(library, artist, title);
   } else {
     printf("ID3v1 tag not found in file: %s\n", file_path);
