@@ -280,9 +280,6 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 
     remove_whitespace(title);
     remove_whitespace(artist);
-
-    // printf("00%s00, ", artist);
-    // printf("00%s00\n", title);
     
     if (search_song(library, artist, title) != NULL){
       return;
@@ -295,61 +292,6 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
 
   song_count++;
 }
-
-// void extract_metadata_id3v2(char * file_path, struct song_node ** library) {
-//   FILE * file = fopen(file_path, "rb");
-
-//   char header[10];
-//   fseek(file, 0, SEEK_SET);
-//   fread(header, 1, 10, file);
-//   if (memcmp(header, "ID3", 3) == 0) {
-//     unsigned int size = ((header[6] & 0x7f) << 21) | ((header[7] & 0x7f) << 14) | ((header[8] & 0x7f) << 7) | (header[9] & 0x7f);
-
-//     // read the rest of the ID3v2 frame data
-//     unsigned char *frame_data = malloc(size);
-//     fread(frame_data, 1, size, file);
-
-//     // ID3v2 frame format: [frame id (4 bytes)][size (4 bytes)][data]
-//     unsigned int offset = 0;
-
-//     char * title;
-//     char * artist;
-
-//     // search for "TIT2" (Title frame) and "TPE1" (Artist frame) in the frame data
-//     while (offset + 10 <= size) {
-//       char frame_id[5];
-//       unsigned int frame_size;
-//       memcpy(frame_id, frame_data + offset, 4);
-//       frame_id[4] = '\0';
-//       frame_size = (frame_data[offset + 4] << 24) | (frame_data[offset + 5] << 16) | (frame_data[offset + 6] << 8) | frame_data[offset + 7];
-
-//       printf("%s\n", frame_id);
-
-//       if (strcmp(frame_id, "TIT2") == 0) {
-//         title = (char *)malloc(frame_size + 1);
-//         memcpy(title, frame_data + offset + 10, frame_size);
-//         title[frame_size] = '\0';
-//         printf("Title: %s\n", title);
-//         //free(title);
-//       } else if (strcmp(frame_id, "TPE1") == 0) {
-//         artist = (char *)malloc(frame_size + 1);
-//         memcpy(artist, frame_data + offset + 10, frame_size);
-//         artist[frame_size] = '\0';
-//         printf("Artist: %s\n", artist);
-//         //free(artist);
-//       }
-
-//       offset += 10 + frame_size;
-//     }
-//     free(frame_data);
-//     add(library, artist, title);
-//   }
-//   else {
-//     printf("ID3v2 tag not found in file: %s\n", file_path);
-//   }
-// fclose(file);
-// song_count++;
-// }
 
 /* Scans for MP3 files in given directory.
  * If finds MP3 file, gets its title and artist.
@@ -369,7 +311,6 @@ void scan_directory_to_extract(char * path, struct song_node ** library) {
       has_mp3 = 1;
       char * file_path = concat(path, entry->d_name);
 
-      //extract_metadata_id3v2(file_path, library);
       extract_metadata_id3v1(file_path, library);
 
       free(file_path); // free memory allocated by concat
@@ -403,7 +344,7 @@ int scan_directory_for_file(char * dir_path, char * file) {
 }
 
 /* Scans for MP3 files in given directory.
- * If finds MP3 file prints it
+ * If finds MP3 file prints it.
 */
 void scan_directory_to_print(char * path) {
   DIR * d = opendir(path);

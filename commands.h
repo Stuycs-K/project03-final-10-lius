@@ -18,7 +18,6 @@ void scan_directory_to_extract(char * path, struct song_node ** library);
 int scan_directory_for_file(char * dir_path, char * file);
 void scan_directory_to_print(char * path);
 void extract_metadata_id3v1(char * file_path, struct song_node ** library);
-//void extract_metadata_id3v2(char * file_path, struct song_node ** library);
 
 char * concat(char * s1, char * s2);
 void remove_whitespace(char * str);
