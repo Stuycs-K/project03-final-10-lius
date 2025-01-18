@@ -98,7 +98,7 @@ void create_account(struct user ** account_lib) {
   // backup account to file
   save_accounts(account_lib);
 
-  printf("Account created!\n");
+  printf("Account created!\n\n");
 }
 
 /* "Logs" user in if account w/ inputted username and password exists.
@@ -157,7 +157,7 @@ void save_accounts(struct user ** account_lib) {
     save_song_library(account_lib[i]->library, file);
 
     // separate structs
-    fputc('\n', file);
+    fputc('a', file);
 
     //printf("Saved account %s\n", account_lib[i]->username);
   }

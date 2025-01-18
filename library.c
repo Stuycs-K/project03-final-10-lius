@@ -169,7 +169,7 @@ void load_song_library(struct song_node ** library, FILE * file) {
 
   while (1) {
     int ch = fgetc(file);
-    if (ch == '\n') {
+    if (ch == 'a') {
       break; // end of current struct
     }
     ungetc(ch, file); // push char back into input stream
