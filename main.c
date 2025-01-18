@@ -42,6 +42,7 @@ int main() {
     printf("4 - Create randomized playlist\n");
     printf("5 - Download library\n");
     printf("6 - Clear library\n");
+    printf("f - Search library\n");
     printf("––\n");
     printf("7 - Login\n");
     printf("8 - Create account\n");
@@ -84,6 +85,9 @@ int main() {
           reset(library);
           printf("Library cleared!\n\n");
           update_account(account_lib, curr_user_index, library);
+          break;
+        case 'f':
+          search(library);
           break;
         case '7':
           curr_user_index = login(account_lib);

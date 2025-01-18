@@ -196,6 +196,60 @@ void download_library(struct song_node ** library) {
   printf("\nLibrary downloaded!\n\n");
 }
 
+/* Searches for song or songs of an artist in library.
+ * Case-sensitive.
+*/
+void search(struct song_node ** library) {
+  char input[1];
+  printf("\nFind...\n");
+  printf("-------\n");
+  printf("1 - Artist\n");
+  printf("2 - Song\n");
+  printf("-------\n> ");
+
+  scanf("%s", input);
+
+  switch (input[0]) {
+    case '1':
+      // find artist
+      getchar(); // clear newline character left by previous scanf
+      char * artist = (char *)malloc(MAX_ARTIST_LEN);
+      printf("Enter artist: ");
+      int valid_input = scanf("%[^\n]", artist);
+      if (!valid_input) artist = "";
+
+      print_artist(library, artist);
+      break;
+    case '2':
+      // find song
+      getchar();
+      char * title = (char *)malloc(MAX_TITLE_LEN);
+      printf("Enter song title: ");
+      valid_input = scanf("%[^\n]", title);
+      if (!valid_input) title = "";
+
+      getchar();
+      printf("Enter artist name: ");
+      valid_input = scanf("%[^\n]", artist);
+      if (!valid_input) artist = "";
+
+      if (search_song(library, artist, title) == NULL) {
+        printf("\nSong not found.\n");
+      }
+      else {
+        printf("\nSong found!\n");
+        printf("%c: ", artist[0]);
+        print_song_list(library[first_letter(artist[0])]);
+      }
+      break;
+    default:
+      printf("\nInvalid command.\n");
+      break;
+  }
+
+  printf("\n");
+}
+
 /* Determines if file is an MP3 file or not.
  * Returns true if file is an MP3 file.
  */

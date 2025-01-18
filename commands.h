@@ -11,6 +11,7 @@ void add_song(struct song_node ** library);
 void remove_song(struct song_node ** library);
 void randomize_songs(struct song_node ** library);
 void download_library(struct song_node ** library);
+void search(struct song_node ** library);
 
 int is_mp3(char * filename);
 void scan_directory_to_extract(char * path, struct song_node ** library);
