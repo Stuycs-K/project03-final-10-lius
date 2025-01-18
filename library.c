@@ -87,25 +87,6 @@ void print_library(struct song_node ** library) {
   printf("\n");
 }
 
-/* Prints out a series of n randomly chosen songs. (can have duplicates) */
-// void real_shuffle(struct song_node ** library, int n) {
-//   struct song_node * all_songs[1000];
-//   int count = 0;
-//   for (int i = 0; i < LIB_SIZE; i++) {
-//     struct song_node * current = library[i];
-//     while (current != NULL) {
-//       all_songs[count++] = current;
-//       current = current->next;
-//     }
-//   }
-//   if (count == 0) return; //library empty
-//   for (int i = 0; i < n; i++) {
-//     int random_index = rand() % count;
-//     printf("{%s, %s}\n", all_songs[random_index]->artist, all_songs[random_index]->title);
-//   }
-//   printf("\n");
-// }
-
 /* Randomizes songs in library.
  * Prints and writes randomized song to file
 */
