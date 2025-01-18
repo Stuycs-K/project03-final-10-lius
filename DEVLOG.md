@@ -35,5 +35,5 @@ Added login and update_account functions. Tested account functions. Restarted on
 ### 2025-01-16 - account functions cont.
 Fixed save account and load account functionalities -- added inc_song_count_by_1() and int get_song_count() in commands.c. Added delete_account and delete_accounts functions. Added functionality to create_account where user can enter q to quit. Created MAX_ARTIST_LEN and MAX_TITLE_LEN macros (2.3 hr)
 
-### 2025-01-17 - Brief description
-Expanded description including how much time was spent on task.
+### 2025-01-17 - small feature updates, function fixes
+Added display_accounts and admin functions. Added search functionality. Fixed delete_account. Fixed save/load song library functions. Added a remove whitespace function. Added a sighandler to make accounts save on ctrl c. Added showing what songs are avaliable to play. Fixed issue where it continues auto adding songs to library even if it already exists. Changed save_library to download_library. Changed if/else statements to switch statements. Created LIB_SAVE and RAND_LIB_SAVE macros. Reorded functions and added comments.
