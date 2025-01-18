@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
 #include <ctype.h>
 #include "node.h"
@@ -15,12 +14,11 @@ int main() {
   load_accounts(account_lib);
   int curr_user_index = -1; // current user logged in
 
-  char input[256];
+  char input[10];
 
   while (1) {
     printf("=====================\n");
     printf("Your current library:\n");
-    //printf("--- Your current library ---\n");
     print_library(library);
 
     printf("-------\n");
@@ -30,68 +28,79 @@ int main() {
     printf("2 - Add song\n");
     printf("3 - Remove song\n");
     printf("4 - Create randomized playlist\n");
-    printf("5 - Save library\n");
+    printf("5 - Download library\n");
     printf("6 - Clear library\n");
+    printf("––\n");
     printf("7 - Login\n");
     printf("8 - Create account\n");
-    printf("9 - Save account\n"); // Issue: is there a way to make this only show once logged in? maybe check for curr_index
-    printf("0 - Delete account\n"); // Issue: is there a way to make this only show once logged in?
-    printf("00 - Delete all accounts\n"); // Issue: is there a way to make this only show once logged in?
+    printf("9 - Save accounts\n");
+    if (curr_user_index >= 0) { 
+      printf("0 - Delete account\n");
+    }
+    printf("–\n");
+    printf("00 - Delete all accounts\n");
+    printf("––\n");
     printf("q - Quit\n");
     printf("-------\n> ");
 
-    //should prob change to switch statements
     scanf("%s", input);
-    if (strcmp(input, "1") == 0) {
-      play_song();
-    }
-    else if (strcmp(input, "2") == 0) {
-      add_song(library);
-      update_account(account_lib, curr_user_index, library);
-    }
-    else if (strcmp(input, "3") == 0) {
-      remove_song(library);
-      update_account(account_lib, curr_user_index, library);
-    }
-    else if (strcmp(input, "4") == 0) {
-      randomize_songs(library);
-    }
-    else if (strcmp(input, "5") == 0) {
-      download_library(library);
-    }
-    else if (strcmp(input, "6") == 0) {
-      printf("Clearing library...\n");
-      reset(library);
-      printf("Library cleared!\n\n");
-      update_account(account_lib, curr_user_index, library);
-    }
-    else if (strcmp(input, "7") == 0) {
-      curr_user_index = login(account_lib);
-      if (curr_user_index >= 0) {
-        library = account_lib[curr_user_index]->library;
-      }
-    }
-    else if (strcmp(input, "8") == 0) {
-      create_account(account_lib);
-    }
-    else if (strcmp(input, "9") == 0) {
-      save_accounts(account_lib);
-      printf("\nAccounts saved!\n\n");
-    }
-    else if (strcmp(input, "0") == 0) {
-      curr_user_index = delete_account(account_lib, curr_user_index, library);
-    }
-    else if (strcmp(input, "00") == 0) {
+    if (strcmp(input, "00") == 0) {
       delete_accounts();
     }
-    else if (strcmp(input, "q") == 0) {
-      return 0;
-    }
     else {
-      printf("\nInvalid command.\n");
-      printf("Try: 1, 2, 3, 4, 5, or q\n\n");
+      switch (input[0]) {
+        case '1':
+          play_song();
+          break;
+        case '2':
+          add_song(library);
+          update_account(account_lib, curr_user_index, library);
+          break;
+        case '3':
+          remove_song(library);
+          update_account(account_lib, curr_user_index, library);
+          break;
+        case '4':
+          randomize_songs(library);
+          break;
+        case '5':
+          download_library(library);
+          break;
+        case '6':
+          printf("Clearing library...\n");
+          reset(library);
+          printf("Library cleared!\n\n");
+          update_account(account_lib, curr_user_index, library);
+          break;
+        case '7':
+          curr_user_index = login(account_lib);
+          if (curr_user_index >= 0) {
+            library = account_lib[curr_user_index]->library;
+          }
+          break;
+        case '8':
+          create_account(account_lib);
+          break;
+        case '9':
+          save_accounts(account_lib);
+          printf("\nAccounts saved!\n\n");
+          break;
+        case '0':
+          curr_user_index = delete_account(account_lib, curr_user_index, library);
+          break;
+        case 'q':
+          return 0;
+        default:
+          printf("\nInvalid command.\n");
+          if (curr_user_index < 0) {
+            printf("Try: 1, 2, 3, 4, 5, 6, 7, 8, 9, or q\n\n");
+          }
+          else {
+            printf("Try: 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, or q\n\n");
+          }
+          break;
+      }
     }
-
   }
 
   return 0;
