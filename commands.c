@@ -282,7 +282,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
     remove_whitespace(title);
     remove_whitespace(artist);
     
-    if (search_song(library, artist, title) != NULL){
+    if (search_song(library, artist, title) != NULL) {
       return;
     }
     add(library, artist, title);
