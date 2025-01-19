@@ -7,7 +7,7 @@ Sophie Liu
 
 ### Project Description:
 
-A simple music player that allows songs to be played, added, removed, and randomized. Also supports account creation to hide your library from those pesky siblings.
+A simple music player that allows songs to be played, added, removed, and randomized. Also supports password-protected account creation to hide your library from those pesky siblings.
 
 ### Instructions:
 
