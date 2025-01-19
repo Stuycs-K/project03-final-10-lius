@@ -22,7 +22,7 @@ void inc_song_count_by_1() {
   song_count++;
 }
 
-/* Plays user inputted song by using mpg123 */
+/* Plays user inputted song using mpg123 */
 void play_song() {
   getchar(); // clear newline character left by previous scanf
   char * song = (char *)malloc(256);
@@ -44,7 +44,7 @@ void play_song() {
 
   pid_t pid = fork();
   if (pid < 0) {
-    perror("fork fail\n");
+    perror("fork fail");
     return;
   }
   if (pid == 0) {
@@ -153,9 +153,10 @@ void randomize_songs(struct song_node ** library) {
   }
   else {
     printf("Creating randomized playlist...\n");
-    printf("\n--- Your Randomized Playlist ---\n");
-    shuffle(library);
-
+    int file_open = shuffle(library);
+    if (!file_open) {
+      return;
+    }
     char input[10];
     printf("Would you like to download this playlist? (yes/no)\n");
     printf("> ");
@@ -167,7 +168,7 @@ void randomize_songs(struct song_node ** library) {
     }
     else {
       if (remove(RAND_LST_SAVE) != 0) {
-        perror("Error deleting file for randomized playlist\n\n");
+        perror("Error deleting file for randomized playlist");
       }
       printf("\n");
     }
@@ -281,7 +282,7 @@ void extract_metadata_id3v1(char * file_path, struct song_node ** library) {
     remove_whitespace(title);
     remove_whitespace(artist);
     
-    if (search_song(library, artist, title) != NULL){
+    if (search_song(library, artist, title) != NULL) {
       return;
     }
     add(library, artist, title);
@@ -328,7 +329,7 @@ void scan_directory_to_extract(char * path, struct song_node ** library) {
 int scan_directory_for_file(char * dir_path, char * file) {
   DIR * d = opendir(dir_path);
   if (dir_path == NULL) {
-    perror("Error opening directory\n");
+    perror("Error opening directory");
     return 0;
   }
 
@@ -349,7 +350,7 @@ int scan_directory_for_file(char * dir_path, char * file) {
 void scan_directory_to_print(char * path) {
   DIR * d = opendir(path);
   if (path == NULL) {
-    perror("Error opening directory\n");
+    perror("Error opening directory");
     return;
   }
 

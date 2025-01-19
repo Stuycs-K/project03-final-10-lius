@@ -67,8 +67,8 @@ void song_list_to_file(struct song_node * list, int fd){
 }
 
 /* Find song associated with given artist and title in given linked list.
- * If found, returns pointer to node.
- * If not found, returns NULL.
+ * Returns pointer to song node.
+ * Returns NULL if song not found.
 */
 struct song_node * find_song(struct song_node * list, char * artist, char * title){
   while(list != NULL){
@@ -81,8 +81,8 @@ struct song_node * find_song(struct song_node * list, char * artist, char * titl
 }
 
 /* Find song associated with given artist.
- * If found, returns pointer to first song w/ the artist.
- * If no songs found, returns NULL.
+ * Returns pointer to first song w/ the artist.
+ * Returns NULL if no songs are found.
 */
 struct song_node * find_song_artist(struct song_node * list, char * artist) {
   while (list != NULL) {
