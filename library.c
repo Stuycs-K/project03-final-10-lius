@@ -34,7 +34,8 @@ void add(struct song_node ** library, char * artist, char * title) {
 }
 
 /* Removes song associated with given artist and title from library.
- * Returns 1 if song exists and was deleted. Returns 0 otherwise.
+ * Returns 1 if song exists and was deleted. 
+ * Returns 0 otherwise.
 */
 int delete_song(struct song_node ** library, char * artist, char * title ) {
   int song_found_staus = delete(&library[first_letter(artist[0])], artist, title);
@@ -50,8 +51,8 @@ struct song_node * search_song(struct song_node ** library, char * artist, char 
 }
 
 /* Searches for given artist in library
- * If found, returns pointer to first song w/ the artist.
- * If no songs found, returns NULL.
+ * Returns pointer to first song w/ the artist.
+ * Returns NULL if no songs are found.
 */
 struct song_node * search_artist(struct song_node ** library, char * artist ) {
   return find_song_artist(library[first_letter(artist[0])], artist);
@@ -89,8 +90,10 @@ void print_library(struct song_node ** library) {
 
 /* Randomizes songs in library.
  * Prints and writes randomized song to file
+ * Returns 1 if the file to write the randomized playlist to successfully opens. 
+ * Returns 0 if file fails to open.
 */
-void shuffle(struct song_node ** library) {
+int shuffle(struct song_node ** library) {
   srand(time(NULL));
 
   // go thru array of linked lists to create array of all songs in library in artist alphabetical order
@@ -106,10 +109,11 @@ void shuffle(struct song_node ** library) {
 
   int fd = open(RAND_LST_SAVE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
-    perror("Error opening file to save randomized playlist\n");
-    return;
+    perror("Error opening file to save randomized playlist");
+    return 0;
   }
 
+  printf("\n--- Your Randomized Playlist ---\n");
   // until no songs left: getting random song, writing it to file & printing it, remove song from array
   int i = 1;
   while (count > 0) {
@@ -131,6 +135,7 @@ void shuffle(struct song_node ** library) {
 
   close(fd);
   printf("\n");
+  return 1;
 }
 
 /* Clears out all the linked lists in the library */

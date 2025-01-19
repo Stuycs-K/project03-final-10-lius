@@ -179,8 +179,9 @@ int load_accounts(struct user ** account_lib) {
   struct user * temp_user;
   while (1) {
     temp_user = (struct user *)malloc(sizeof(struct user));
-    size_t read_size = fread(temp_user, sizeof(struct user), 1, file);
 
+    // load username and password
+    size_t read_size = fread(temp_user, sizeof(struct user), 1, file);
     if (read_size == 0) {
       free(temp_user);  // free memory if no data is read
       break;
