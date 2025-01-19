@@ -107,10 +107,11 @@ int shuffle(struct song_node ** library) {
     }
   }
 
+  int file_open = 1;
   int fd = open(RAND_LST_SAVE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd == -1) {
     perror("Error opening file to save randomized playlist");
-    return 0;
+    file_open = 0;
   }
 
   printf("\n--- Your Randomized Playlist ---\n");
@@ -135,7 +136,7 @@ int shuffle(struct song_node ** library) {
 
   close(fd);
   printf("\n");
-  return 1;
+  return file_open;
 }
 
 /* Clears out all the linked lists in the library */
