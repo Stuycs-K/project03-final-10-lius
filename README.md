@@ -22,4 +22,4 @@ sudo apt install mpg123
 - To exit the program, enter ``q`` on home screen or ``ctrl c`` anywhere
 
 ### Video Link:
-[youtube.com](youtube.com)
+[https://drive.goooogle.com/file/d/1B9sjyNZTEpANKkgaeII83FcAE1WGhtfu/](https://drive.google.com/file/d/1B9sjyNZTEpANKkgaeII83FcAE1WGhtfu/view?usp=sharing)
