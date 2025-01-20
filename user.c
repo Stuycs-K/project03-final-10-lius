@@ -271,7 +271,7 @@ void admin(struct user ** account_lib) {
     while (1) {
       printf("=====================\n");
       printf("\n-- Welcome --\n");
-      char input[1];
+      char input[10];
       printf("-------\n");
       printf("1 - Display accounts\n");
       printf("2 - Delete accounts\n");
