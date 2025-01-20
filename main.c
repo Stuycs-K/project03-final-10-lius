@@ -91,7 +91,7 @@ int main() {
             search(library);
             break;
           case '7':
-            curr_user_index = login(account_lib);
+            curr_user_index = login(account_lib, curr_user_index);
             if (curr_user_index >= 0) {
               library = account_lib[curr_user_index]->library;
             }

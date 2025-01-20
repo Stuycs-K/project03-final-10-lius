@@ -102,10 +102,11 @@ void create_account(struct user ** account_lib) {
 }
 
 /* "Logs" user in if account w/ inputted username and password exists.
+ * int curr_user_index: current user logged in
  * Returns the index of the user who logged in.
- * Returns -1 if unsuccessful log in.
+ * Returns the index of the original user logged in if login unsuccessful.
 */
-int login(struct user ** account_lib) {
+int login(struct user ** account_lib, int curr_user_index) {
   getchar(); // clear newline character left by previous scanf
   char username[MAX_USERNAME_LEN];
   printf("Enter username: ");
@@ -124,7 +125,7 @@ int login(struct user ** account_lib) {
   }
 
   printf("\nInvalid username or password.\n\n");
-  return -1;
+  return curr_user_index;
 }
 
 /* Saves song library locally to logged in account.
@@ -203,6 +204,7 @@ int load_accounts(struct user ** account_lib) {
 }
 
 /* Deletes logged in account.
+ * int curr_user_index: current user logged in
  * Removes account from account_lib and backup file.
  * Removes all songs in library.
 */
