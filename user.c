@@ -296,7 +296,7 @@ void admin(struct user ** account_lib) {
         }
       }
       else {
-        printf("\niInvalid command.\n");
+        printf("\nInvalid command.\n");
       }
     }
   }
