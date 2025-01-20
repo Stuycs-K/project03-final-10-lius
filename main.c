@@ -51,72 +51,74 @@ int main() {
       printf("0 - Delete account\n");
     }
     printf("––\n");
-    printf("p - Admin\n");
+    printf("00 - Admin\n");
     printf("––\n");
     printf("q - Quit\n");
     printf("-------\n> ");
 
     scanf("%s", input);
     
-    if (strlen(input) == 1) {
-      switch (input[0]) {
-        case '1':
-          play_song();
-          break;
-        case '2':
-          add_song(library);
-          update_account(account_lib, curr_user_index, library);
-          break;
-        case '3':
-          remove_song(library);
-          update_account(account_lib, curr_user_index, library);
-          break;
-        case '4':
-          randomize_songs(library);
-          break;
-        case '5':
-          download_library(library);
-          break;
-        case '6':
-          printf("\nClearing library...\n");
-          reset(library);
-          printf("Library cleared!\n\n");
-          update_account(account_lib, curr_user_index, library);
-          break;
-        case 'f':
-          search(library);
-          break;
-        case '7':
-          curr_user_index = login(account_lib);
-          if (curr_user_index >= 0) {
-            library = account_lib[curr_user_index]->library;
-          }
-          break;
-        case '8':
-          create_account(account_lib);
-          break;
-        case '9':
-          printf("\nSaving accounts...\n");
-          save_accounts(account_lib);
-          printf("\nAccounts saved!\n\n");
-          break;
-        case '0':
-          curr_user_index = delete_account(account_lib, curr_user_index, library);
-          break;
-        case 'p':
-          admin(account_lib);
-          break;
-        case 'q':
-          save_accounts(account_lib);
-          printf("_____________________\n");
-          return 0;
-        default:
-          invalid_cmd(curr_user_index);
-          break;
-      }
+    if (strcmp(input, "00") == 0) {
+      admin(account_lib);
     }
     else {
-      invalid_cmd(curr_user_index);
+      if (strlen(input) == 1) {
+        switch (input[0]) {
+          case '1':
+            play_song();
+            break;
+          case '2':
+            add_song(library);
+            update_account(account_lib, curr_user_index, library);
+            break;
+          case '3':
+            remove_song(library);
+            update_account(account_lib, curr_user_index, library);
+            break;
+          case '4':
+            randomize_songs(library);
+            break;
+          case '5':
+            download_library(library);
+            break;
+          case '6':
+            printf("\nClearing library...\n");
+            reset(library);
+            printf("Library cleared!\n\n");
+            update_account(account_lib, curr_user_index, library);
+            break;
+          case 'f':
+            search(library);
+            break;
+          case '7':
+            curr_user_index = login(account_lib);
+            if (curr_user_index >= 0) {
+              library = account_lib[curr_user_index]->library;
+            }
+            break;
+          case '8':
+            create_account(account_lib);
+            break;
+          case '9':
+            printf("\nSaving accounts...\n");
+            save_accounts(account_lib);
+            printf("\nAccounts saved!\n\n");
+            break;
+          case '0':
+            curr_user_index = delete_account(account_lib, curr_user_index, library);
+            break;
+          case 'q':
+            save_accounts(account_lib);
+            printf("_____________________\n");
+            return 0;
+          default:
+            invalid_cmd(curr_user_index);
+            break;
+        }
+      }
+      else {
+        invalid_cmd(curr_user_index);
+      }
     }
   }
 
