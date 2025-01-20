@@ -201,7 +201,7 @@ void download_library(struct song_node ** library) {
  * Find song is case-sensitive.
 */
 void search(struct song_node ** library) {
-  char input[1];
+  int input;
   char * artist;
   char * title;
   printf("\nFind...\n");
@@ -210,10 +210,10 @@ void search(struct song_node ** library) {
   printf("2 - Song\n");
   printf("-------\n> ");
 
-  scanf("%s", input);
+  scanf("%d", &input);
 
-  switch (input[0]) {
-    case '1':
+  switch (input) {
+    case 1:
       // find artist
       getchar(); // clear newline character left by previous scanf
       artist = (char *)malloc(MAX_ARTIST_LEN);
@@ -223,7 +223,7 @@ void search(struct song_node ** library) {
 
       print_artist(library, artist);
       break;
-    case '2':
+    case 2:
       // find song
       getchar();
       title = (char *)malloc(MAX_TITLE_LEN);
