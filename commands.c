@@ -71,17 +71,17 @@ void play_song() {
 
 /* Adds song(s) to library */
 void add_song(struct song_node ** library) {
-  char input[1];
+  int input;
   printf("\nWould you like to manually add a song or automatically input one via MP3 file?\n");
   printf("-------\n");
   printf("1 - Manual\n");
   printf("2 - Automatic\n");
   printf("-------\n> ");
 
-  scanf("%s", input);
+  scanf("%d", &input);
 
-  switch (input[0]) {
-    case '1':
+  switch (input) {
+    case 1:
       // manual
       getchar(); // clear newline character left by previous scanf
       char * title = (char *)malloc(MAX_TITLE_LEN);
@@ -99,7 +99,7 @@ void add_song(struct song_node ** library) {
 
       song_count++;
       break;
-    case '2':
+    case 2:
       // auto
       printf("\nAdding songs...\n");
       scan_directory_to_extract(MP3_FILES_DIR_PATH, library);
@@ -248,6 +248,17 @@ void search(struct song_node ** library) {
   }
 
   printf("\n");
+}
+
+/* Print statement for when user inputs a command that doesn't exist */
+void invalid_cmd(int curr_user_index) {
+  printf("\nInvalid command.\n");
+  if (curr_user_index < 0) {
+    printf("Try: 1, 2, 3, 4, 5, 6, 7, 8, 9, or q\n\n");
+  }
+  else {
+    printf("Try: 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, or q\n\n");
+  }
 }
 
 /* Determines if file is an MP3 file or not.

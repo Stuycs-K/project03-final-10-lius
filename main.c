@@ -51,17 +51,14 @@ int main() {
       printf("0 - Delete account\n");
     }
     printf("––\n");
-    printf("00 - Admin\n");
+    printf("p - Admin\n");
     printf("––\n");
     printf("q - Quit\n");
     printf("-------\n> ");
 
     scanf("%s", input);
     
-    if (strcmp(input, "00") == 0) {
-      admin(account_lib);
-    }
-    else {
+    if (strlen(input) == 1) {
       switch (input[0]) {
         case '1':
           play_song();
@@ -106,20 +103,20 @@ int main() {
         case '0':
           curr_user_index = delete_account(account_lib, curr_user_index, library);
           break;
+        case 'p':
+          admin(account_lib);
+          break;
         case 'q':
           save_accounts(account_lib);
           printf("_____________________\n");
           return 0;
         default:
-          printf("\nInvalid command.\n");
-          if (curr_user_index < 0) {
-            printf("Try: 1, 2, 3, 4, 5, 6, 7, 8, 9, or q\n\n");
-          }
-          else {
-            printf("Try: 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, or q\n\n");
-          }
+          invalid_cmd(curr_user_index);
           break;
       }
+    }
+    else {
+      invalid_cmd(curr_user_index);
     }
   }
 

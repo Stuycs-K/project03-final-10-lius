@@ -280,18 +280,23 @@ void admin(struct user ** account_lib) {
 
       scanf("%s", input);
 
-      switch (input[0]) {
-        case '1':
-          display_accounts(account_lib);
-          break;
-        case '2':
-          delete_accounts();
-          break;
-        case 'q':
-          return;
-        default:
-          printf("\nInvalid command.\n");
-          break;
+      if (strlen(input) == 1) {
+        switch (input[0]) {
+          case 1:
+            display_accounts(account_lib);
+            break;
+          case 2:
+            delete_accounts();
+            break;
+          case 'q':
+            return;
+          default:
+            printf("\nInvalid command.\n");
+            break;
+        }
+      }
+      else {
+        printf("\nInvalid command.\n");
       }
     }
   }
