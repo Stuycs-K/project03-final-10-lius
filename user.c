@@ -282,10 +282,10 @@ void admin(struct user ** account_lib) {
 
       if (strlen(input) == 1) {
         switch (input[0]) {
-          case 1:
+          case '1':
             display_accounts(account_lib);
             break;
-          case 2:
+          case '2':
             delete_accounts();
             break;
           case 'q':
@@ -296,7 +296,7 @@ void admin(struct user ** account_lib) {
         }
       }
       else {
-        printf("\nInvalid command.\n");
+        printf("\niInvalid command.\n");
       }
     }
   }
