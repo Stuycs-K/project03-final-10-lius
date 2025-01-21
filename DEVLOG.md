@@ -40,3 +40,6 @@ Added display_accounts and admin functions. Added search functionality. Fixed de
 
 ### 2025-01-19 - downloads folder, bug fixes, video
 Added downloads folder for randomized playlist and library saves. Fixed user input and switch statement bugs. Added video. (3.5 hr)
+
+### 2025-01-20 - print change
+Added a line break in create_account. (1 min)
