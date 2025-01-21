@@ -98,7 +98,7 @@ void create_account(struct user ** account_lib) {
   // backup account to file
   save_accounts(account_lib);
 
-  printf("Account created!\n\n");
+  printf("\nAccount created!\n\n");
 }
 
 /* "Logs" user in if account w/ inputted username and password exists.
